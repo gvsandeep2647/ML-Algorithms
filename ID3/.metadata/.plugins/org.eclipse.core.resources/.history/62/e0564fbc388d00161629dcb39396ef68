@@ -1,0 +1,59 @@
+import java.io.*;
+/**
+ * @author Sandeep,Snehal,Kushagra,Tanmay
+ * AIM : To implement and find the efficieny of ID3 algorithm on a particular Dataset.
+ */
+
+class DataSet{
+	int age;
+	String workClass;
+	int fnlwgt;
+	String education;
+	int educationNum;
+	String maritalStatus;
+	String occupation;
+	String race;
+	String sex;
+	int capitalGain;
+	int capitalLoss;
+	int hoursPerWeek;
+	String nativeCountry;
+	DataSet(int age,String workClass,int fnlwgt,String education,int educationNum,String maritalStatus,String occupation,String race,String sex,int capitalGain,int capitalLoss,int hoursPerWeek,String nativeCountry){
+		this.age =  age;
+		this.workClass = workClass;
+		this.fnlwgt = fnlwgt;
+		this.education = education;
+		this.educationNum =  educationNum;
+		this.maritalStatus =  maritalStatus;
+		this.occupation =  occupation;
+		this.race =  race;
+		this.sex =  sex;
+		this.capitalGain =  capitalGain;
+		this.capitalLoss =  capitalLoss;
+		this.hoursPerWeek =  hoursPerWeek;
+		this.nativeCountry = nativeCountry;
+	}
+	
+}
+public class ID3 {
+	
+  	public static void main(String[] args) {
+        try{
+        	inputHandle();
+        }catch(Exception e){
+        	System.out.println(e);
+        }
+  	}
+  	/**
+  	 * @throws IOException
+  	 * Reads the data from the text file and stores it in the object.
+  	 */
+  	public static void inputHandle()throws IOException {
+  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+         String line=null;
+         while( (line=br.readLine()) != null) {
+                System.out.println(line);  
+         }
+         br.close();
+  	}
+}
