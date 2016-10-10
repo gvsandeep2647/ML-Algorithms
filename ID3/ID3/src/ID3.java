@@ -192,6 +192,7 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println(e);
         }
+        calcSplit(data);
   	}
   	/**
   	 * @throws IOException
@@ -247,5 +248,98 @@ public class ID3 {
          }
          System.out.println(data.size());
          br.close();
+  	}
+  	
+  	public static void calcSplit(ArrayList<DataSet> data){
+  		ArrayList<Integer> age = new ArrayList<Integer>();
+  		ArrayList<Integer> fnlwgt = new ArrayList<Integer>();
+  		ArrayList<Integer> educationNum = new ArrayList<Integer>();
+  		ArrayList<Integer> capitalGain = new ArrayList<Integer>();
+  		ArrayList<Integer> capitalLoss = new ArrayList<Integer>();
+  		ArrayList<Integer> hoursPerWeek = new ArrayList<Integer>();
+  		DataSet obj;
+  		int lg,k;
+  		for(int i = 0;i<data.size();i++){
+  			obj = data.get(i);
+  			if(!age.contains(obj.age)){
+  				age.add(obj.age);
+  			}
+  			if(!fnlwgt.contains(obj.fnlwgt)){
+  				fnlwgt.add(obj.fnlwgt);
+  			}
+  			if(!educationNum.contains(obj.educationNum)){
+  				educationNum.add(obj.educationNum);
+  			}
+  			if(!capitalGain.contains(obj.capitalGain)){
+  				capitalGain.add(obj.capitalGain);
+  			}
+  			if(!capitalLoss.contains(obj.capitalLoss)){
+  				capitalLoss.add(obj.capitalLoss);
+  			}
+  			if(!hoursPerWeek.contains(obj.hoursPerWeek)){
+  				hoursPerWeek.add(obj.hoursPerWeek);
+  			}
+  		}
+  		Collections.sort(age);
+  		Collections.sort(fnlwgt);
+  		Collections.sort(educationNum);
+  		Collections.sort(capitalGain);
+  		Collections.sort(capitalLoss);
+  		Collections.sort(hoursPerWeek);
+  		
+  		int ageCount[][] = new int[3][(age.size()-1)*2];
+  		//int fnlwgtCount[][] = new int[3][(fnlwgt.size()-1)*2];
+  		int educationNumCount[][] = new int[3][(educationNum.size()-1)*2];
+  		int capitalGainCount[][] = new int[3][(capitalGain.size()-1)*2];
+  		int capitalLossCount[][] = new int[3][(capitalLoss.size()-1)*2];
+  		int hoursPerWeekCount[][] = new int[3][(hoursPerWeek.size()-1)*2];
+  		
+  		for(int i=0;i<age.size()-1;i++){
+  			ageCount[0][2*i] = ageCount[0][2*i+1] = (age.get(i)+age.get(i+1))/2;
+  		}
+  		for(int i=0;i<educationNum.size()-1;i++){
+  			educationNumCount[0][2*i] = educationNumCount[0][2*i+1] = (educationNum.get(i)+educationNum.get(i+1))/2;
+  		}
+  		for(int i=0;i<capitalGain.size()-1;i++){
+  			capitalGainCount[0][2*i] = capitalGainCount[0][2*i+1] = (capitalGain.get(i)+capitalGain.get(i+1))/2;
+  		}
+  		for(int i=0;i<capitalLoss.size()-1;i++){
+  			capitalLossCount[0][2*i] = capitalLossCount[0][2*i+1] = (capitalLoss.get(i)+capitalLoss.get(i+1))/2;
+  		}
+  		for(int i=0;i<hoursPerWeek.size()-1;i++){
+  			hoursPerWeekCount[0][2*i] = hoursPerWeekCount[0][2*i+1] = (hoursPerWeek.get(i)+hoursPerWeek.get(i+1))/2;
+  		}
+  		
+  		for(int i=0;i<data.size();i++){
+  			obj = data.get(i);
+  			k = obj.result +1;
+  			for(int j=0;j<(age.size()-1)*2;j+=2){
+  				lg = (obj.age <= ageCount[0][j])?0:1;
+  				ageCount[k][j+lg]++;
+  			}
+  			/*for(int j=0;j<educationNum.size()-1;j++){
+  				lg = (obj.educationNum <= educationNumCount[0][2*j])?0:1;
+  				k = obj.result +1;
+  				educationNumCount[k][2*j+lg]++;
+  			}
+  			for(int j=0;j<capitalGain.size()-1;j++){
+  				lg = (obj.capitalGain <= capitalGainCount[0][2*j])?0:1;
+  				k = obj.result +1;
+  				capitalGainCount[k][2*j+lg]++;
+  			}
+  			for(int j=0;j<capitalLoss.size()-1;j++){
+  				lg = (obj.capitalLoss <= capitalLossCount[0][2*j])?0:1;
+  				k = obj.result +1;
+  				capitalLossCount[k][2*j+lg]++;
+  			}
+  			for(int j=0;j<hoursPerWeek.size()-1;j++){
+  				lg = (obj.hoursPerWeek <= hoursPerWeekCount[0][2*j])?0:1;
+  				k = obj.result +1;
+  				hoursPerWeekCount[k][2*j+lg]++;
+  			}*/
+  		}
+  		/*for(int i=0;i<ageCount.length;i++){
+  			System.out.println(ageCount[0][i]+" "+ageCount[1][i]+" "+ageCount[2][i]);
+  		}*/
   	}
 }
