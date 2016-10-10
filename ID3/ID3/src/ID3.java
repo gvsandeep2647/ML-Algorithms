@@ -39,7 +39,7 @@ class DataSet{
 		this.capitalLoss = capitalLoss;
 		this.hoursPerWeek = hoursPerWeek;
 		this.nativeCountry = nativeCountry;
-		result = income.equals("<=50k")?0:1;
+		result = income.equals("<=50K")?0:1;
 	}
 	
 }
@@ -192,7 +192,9 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println(e);
         }
-        calcSplit(data);
+        int ageSplit = calcSplit(data,"hoursPerWeek");
+        System.out.println(ageSplit);
+        //calcSplit(data,"fnlwgt");
   	}
   	/**
   	 * @throws IOException
@@ -250,96 +252,86 @@ public class ID3 {
          br.close();
   	}
   	
-  	public static void calcSplit(ArrayList<DataSet> data){
-  		ArrayList<Integer> age = new ArrayList<Integer>();
-  		ArrayList<Integer> fnlwgt = new ArrayList<Integer>();
-  		ArrayList<Integer> educationNum = new ArrayList<Integer>();
-  		ArrayList<Integer> capitalGain = new ArrayList<Integer>();
-  		ArrayList<Integer> capitalLoss = new ArrayList<Integer>();
-  		ArrayList<Integer> hoursPerWeek = new ArrayList<Integer>();
+  	/*
+  	 * calculates where split should happen in continuous variables based on the gini index
+  	 */
+  	public static int calcSplit(ArrayList<DataSet> data, String param){
+  		Map<Integer, Integer> _cnt = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance <=50K
+  		Map<Integer, Integer> cnt_ = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance >50K
+  		ArrayList<Integer> list = new ArrayList<Integer>();		//store unique values the feature can take
   		DataSet obj;
-  		int lg,k;
-  		for(int i = 0;i<data.size();i++){
+  		int N = data.size();
+  		for(int i=0;i<N;i++){
   			obj = data.get(i);
-  			if(!age.contains(obj.age)){
-  				age.add(obj.age);
+  			int value;
+  			if(param.equals("age")){
+  				value = obj.age;
   			}
-  			if(!fnlwgt.contains(obj.fnlwgt)){
-  				fnlwgt.add(obj.fnlwgt);
+  			else if(param.equals("fnlwgt")){
+  				value = obj.fnlwgt;
   			}
-  			if(!educationNum.contains(obj.educationNum)){
-  				educationNum.add(obj.educationNum);
+  			else if(param.equals("educationNum")){
+  				value = obj.educationNum;
   			}
-  			if(!capitalGain.contains(obj.capitalGain)){
-  				capitalGain.add(obj.capitalGain);
+  			else if(param.equals("capitalGain")){
+  				value = obj.capitalGain;
   			}
-  			if(!capitalLoss.contains(obj.capitalLoss)){
-  				capitalLoss.add(obj.capitalLoss);
+  			else if(param.equals("capitalLoss")){
+  				value = obj.capitalLoss;
   			}
-  			if(!hoursPerWeek.contains(obj.hoursPerWeek)){
-  				hoursPerWeek.add(obj.hoursPerWeek);
+  			else{
+  				value = obj.hoursPerWeek;
+  			}
+  			if(!list.contains(value)){
+  				list.add(value);
+  				if(obj.result == 0){
+  					_cnt.put(value,1);
+  					cnt_.put(value, 0);
+  				}
+  				else{
+  					_cnt.put(value,0);
+  					cnt_.put(value,1);
+  				}
+  			}
+  			else{
+  				if(obj.result==0){
+  					_cnt.put(value, _cnt.get(value)+1);
+  				}
+  				else
+  					cnt_.put(value, cnt_.get(value)+1);
   			}
   		}
-  		Collections.sort(age);
-  		Collections.sort(fnlwgt);
-  		Collections.sort(educationNum);
-  		Collections.sort(capitalGain);
-  		Collections.sort(capitalLoss);
-  		Collections.sort(hoursPerWeek);
+  		Collections.sort(list);
+
+  		for(int i=1;i<list.size();i++){
+  			_cnt.put(list.get(i),_cnt.get(list.get(i))+_cnt.get(list.get(i-1)));
+  			cnt_.put(list.get(i),cnt_.get(list.get(i))+cnt_.get(list.get(i-1)));
+  		}
+  		//count matrix - count[0][i] and count[0][i+i] has the split value 
+  		//count matrix - count[1][i] has no of instances <= split value and result = <=50K; count[1][i+1] has no of instances <=split value and result = >50K
+  		//count matrix - count[2][i] has no of instances > split value and result = <=50K; count[2][i+1] has no of instances > split value and result = > 50K
+  		int count[][] = new int[3][(list.size()-1)*2];
   		
-  		int ageCount[][] = new int[3][(age.size()-1)*2];
-  		//int fnlwgtCount[][] = new int[3][(fnlwgt.size()-1)*2];
-  		int educationNumCount[][] = new int[3][(educationNum.size()-1)*2];
-  		int capitalGainCount[][] = new int[3][(capitalGain.size()-1)*2];
-  		int capitalLossCount[][] = new int[3][(capitalLoss.size()-1)*2];
-  		int hoursPerWeekCount[][] = new int[3][(hoursPerWeek.size()-1)*2];
-  		
-  		for(int i=0;i<age.size()-1;i++){
-  			ageCount[0][2*i] = ageCount[0][2*i+1] = (age.get(i)+age.get(i+1))/2;
+  		for(int i=0;i<list.size()-1;i++){
+  			count[0][2*i] = count[0][2*i+1] = (list.get(i)+list.get(i+1))/2;
+  			count[1][2*i] = _cnt.get(list.get(i));
+  			count[2][2*i] = cnt_.get(list.get(i));
+  			count[1][2*i+1] = _cnt.get(list.get(list.size()-1))-count[1][2*i];
+  			count[2][2*i+1] = cnt_.get(list.get(list.size()-1))-count[2][2*i];
   		}
-  		for(int i=0;i<educationNum.size()-1;i++){
-  			educationNumCount[0][2*i] = educationNumCount[0][2*i+1] = (educationNum.get(i)+educationNum.get(i+1))/2;
-  		}
-  		for(int i=0;i<capitalGain.size()-1;i++){
-  			capitalGainCount[0][2*i] = capitalGainCount[0][2*i+1] = (capitalGain.get(i)+capitalGain.get(i+1))/2;
-  		}
-  		for(int i=0;i<capitalLoss.size()-1;i++){
-  			capitalLossCount[0][2*i] = capitalLossCount[0][2*i+1] = (capitalLoss.get(i)+capitalLoss.get(i+1))/2;
-  		}
-  		for(int i=0;i<hoursPerWeek.size()-1;i++){
-  			hoursPerWeekCount[0][2*i] = hoursPerWeekCount[0][2*i+1] = (hoursPerWeek.get(i)+hoursPerWeek.get(i+1))/2;
-  		}
-  		
-  		for(int i=0;i<data.size();i++){
-  			obj = data.get(i);
-  			k = obj.result +1;
-  			for(int j=0;j<(age.size()-1)*2;j+=2){
-  				lg = (obj.age <= ageCount[0][j])?0:1;
-  				ageCount[k][j+lg]++;
+  		int split = -1;
+  		double minGini = 1;
+  		for(int i=0;i<(list.size()-1)*2;i+=2){
+  			double total1 = count[1][i] + count[2][i];
+  			double total2 = count[1][i+1] + count[2][i+1];
+  			double gini1 = 1 - Math.pow(count[1][i]/total1,2) - Math.pow(count[2][i]/total1,2);
+  			double gini2 = 1 - Math.pow(count[1][i+1]/total2, 2) - Math.pow(count[2][i+1]/total2,2);
+  			double gini = (total1/N)*gini1 + (total2/N)*gini2;
+  			if(gini<minGini){
+  				minGini = gini;
+  				split = count[0][i];
   			}
-  			/*for(int j=0;j<educationNum.size()-1;j++){
-  				lg = (obj.educationNum <= educationNumCount[0][2*j])?0:1;
-  				k = obj.result +1;
-  				educationNumCount[k][2*j+lg]++;
-  			}
-  			for(int j=0;j<capitalGain.size()-1;j++){
-  				lg = (obj.capitalGain <= capitalGainCount[0][2*j])?0:1;
-  				k = obj.result +1;
-  				capitalGainCount[k][2*j+lg]++;
-  			}
-  			for(int j=0;j<capitalLoss.size()-1;j++){
-  				lg = (obj.capitalLoss <= capitalLossCount[0][2*j])?0:1;
-  				k = obj.result +1;
-  				capitalLossCount[k][2*j+lg]++;
-  			}
-  			for(int j=0;j<hoursPerWeek.size()-1;j++){
-  				lg = (obj.hoursPerWeek <= hoursPerWeekCount[0][2*j])?0:1;
-  				k = obj.result +1;
-  				hoursPerWeekCount[k][2*j+lg]++;
-  			}*/
   		}
-  		/*for(int i=0;i<ageCount.length;i++){
-  			System.out.println(ageCount[0][i]+" "+ageCount[1][i]+" "+ageCount[2][i]);
-  		}*/
-  	}
+  		return split;
+  	}  	
 }
