@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * TODO : 
- * 1. Updating Values in the Map.
+ * 2. Updating Values in the Map.
  */
 public class ID3 {
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();

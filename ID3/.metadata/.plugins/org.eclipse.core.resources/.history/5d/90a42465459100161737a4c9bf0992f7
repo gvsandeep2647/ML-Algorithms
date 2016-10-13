@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * TODO : 
- * 1. Updating Values in the Map.
+ * 2. Updating Values in the Map.
  */
 public class ID3 {
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
@@ -80,12 +80,8 @@ public class ID3 {
          br.close();
   	}
   	
-  	
-  	/**
-  	 * @param data
-  	 * @param param
-  	 * @return split
-  	 * Calculates where split should happen in continuous variables based on the gini index
+  	/*
+  	 * calculates where split should happen in continuous variables based on the gini index
   	 */
   	public static int calcSplit(ArrayList<DataSet> data, String param){
   		Map<Integer, Integer> _cnt = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance <=50K
