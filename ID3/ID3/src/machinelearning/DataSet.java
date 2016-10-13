@@ -37,4 +37,13 @@ class DataSet{
 		result = income.equals("<=50K")?0:1;
 	}
 	
+   @Override
+   public String toString() {
+        return ("Age: "+this.age+" Work Class: "+ this.workClass +" fnlwgt: "+ this.fnlwgt +" Education : " + this.education
+        		+" Education Num: "+this.educationNum+" Marital Status "+this.maritalStatus+" Occuptaion: "+this.occupation
+        		+ " RelationShip Status: "+this.relationship+" Race: "+this.race+" Sex: "+this.sex
+        		+ " Capital Gain: "+this.capitalGain+" Capital Loss: "+this.capitalLoss+" Hours Per Week: "+this.hoursPerWeek
+        		+ " nativeCountry :"+this.nativeCountry+" Result: "+this.result );
+   }
+	
 }

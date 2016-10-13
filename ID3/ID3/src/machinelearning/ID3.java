@@ -6,10 +6,6 @@ import java.util.*;
  * AIM : To implement and find the efficiency of ID3 algorithm on a particular Dataset.
  */
 
-/**
- * TODO : 
- * 1. Updating Values in the Map.
- */
 public class ID3 {
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
   	public static void main(String[] args) {
@@ -18,19 +14,15 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println(e);
         }
-        System.out.println(calcSplit(data,"age"));
-        System.out.println(calcSplit(data,"fnlwgt"));
-        System.out.println(calcSplit(data,"educationNum"));
-        System.out.println(calcSplit(data,"capitalGain"));
-        System.out.println(calcSplit(data,"capitalLoss"));
-        System.out.println(calcSplit(data,"hoursPerWeek"));
+ 
+        DataCount.updateValues(calcSplit(data,"age"),calcSplit(data,"fnlwgt"),calcSplit(data,"educationNum"),calcSplit(data,"capitalGain"),calcSplit(data,"capitalLoss"),calcSplit(data,"hoursPerWeek"),data);
   	}
   	/**
   	 * @throws IOException
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {

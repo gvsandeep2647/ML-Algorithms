@@ -8,6 +8,7 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="adult.txt"/>
 			<item value="test.txt"/>
 		</list>
 		<list key="replacehistory">
