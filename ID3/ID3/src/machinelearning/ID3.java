@@ -14,8 +14,8 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println(e);
         }
- 
-        DataCount.updateValues(calcSplit(data,"age"),calcSplit(data,"fnlwgt"),calcSplit(data,"educationNum"),calcSplit(data,"capitalGain"),calcSplit(data,"capitalLoss"),calcSplit(data,"hoursPerWeek"),data);
+        DataCount firstLevel = new DataCount();
+        firstLevel.updateValues(calcSplit(data,"age"),calcSplit(data,"fnlwgt"),calcSplit(data,"educationNum"),calcSplit(data,"capitalGain"),calcSplit(data,"capitalLoss"),calcSplit(data,"hoursPerWeek"),data);
   	}
   	/**
   	 * @throws IOException

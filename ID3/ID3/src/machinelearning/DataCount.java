@@ -25,7 +25,7 @@ class DataCount{
 		
 	//age is continuous. Split appropriately.
 		
-	workClass.put("Private", new int[2]);
+	workClass.put("Private", new int[] {0,0});
 	workClass.put("Self-emp-not-inc",new int[2]);
 	workClass.put("Self-emp-inc",new int[2]);
 	workClass.put("Federal-giv",new int[2]);
@@ -169,71 +169,73 @@ class DataCount{
 		
 		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
 			DataSet dataItem = (DataSet) iterator.next();
-			if(dataItem.result==1)
+			if(dataItem.result==0)
 			{
 				if(dataItem.age<=ageSplit)
-					age.get("<=")[0]++;
+					age.get("<="+ageSplit)[0]++;
 				else
-					age.get(">")[0]++;
-				workClass.get(dataItem.workClass)[0]++;
+					age.get(">"+ageSplit)[0]++;
 				if(dataItem.fnlwgt<=fnlSplit)
-					fnlwgt.get("<=")[0]++;
+					fnlwgt.get("<="+fnlSplit)[0]++;
 				else
-					fnlwgt.get(">")[0]++;
-				education.get(dataItem.education)[0]++;
+					fnlwgt.get(">"+fnlSplit)[0]++;
+				education.get("Bachelors")[0]++;
+				workClass.get(dataItem.workClass)[0]++;
 				if(dataItem.educationNum<=eduNumSplit)
-					educationNum.get("<=")[0]++;
+					educationNum.get("<="+eduNumSplit)[0]++;
 				else
-					educationNum.get(">")[0]++;
+					educationNum.get(">"+eduNumSplit)[0]++;
 				occupation.get(dataItem.occupation)[0]++;
 				relationship.get(dataItem.relationship)[0]++;
 				race.get(dataItem.race)[0]++;
 				sex.get(dataItem.sex)[0]++;
+				maritalStatus.get(dataItem.maritalStatus)[0]++;
 				if(dataItem.capitalGain<=capGainSplit)
-					capitalGain.get("<=")[0]++;
+					capitalGain.get("<="+capGainSplit)[0]++;
 				else
-					capitalGain.get(">")[0]++;
+					capitalGain.get(">"+capGainSplit)[0]++;
 				if(dataItem.capitalLoss<=capLossSplit)
-					capitalLoss.get("<=")[0]++;
+					capitalLoss.get("<="+capLossSplit)[0]++;
 				else
-					capitalLoss.get(">")[0]++;
+					capitalLoss.get(">"+capLossSplit)[0]++;
 				if(dataItem.hoursPerWeek<=hoursSplit)
-					hoursPerWeek.get("<=")[0]++;
+					hoursPerWeek.get("<="+hoursSplit)[0]++;
 				else
-					hoursPerWeek.get(">")[0]++;
-				nativeCountry.get(dataItem.nativeCountry)[1]++;
+					hoursPerWeek.get(">"+hoursSplit)[0]++;
+				nativeCountry.get(dataItem.nativeCountry)[0]++;
 			}else{
 				if(dataItem.age<=ageSplit)
-					age.get("<=")[0]++;
+					age.get("<="+ageSplit)[1]++;
 				else
-					age.get(">")[0]++;
-				workClass.get(dataItem.workClass)[0]++;
+					age.get(">"+ageSplit)[1]++;
+				workClass.get(dataItem.workClass)[1]++;
 				if(dataItem.fnlwgt<=fnlSplit)
-					fnlwgt.get("<=")[0]++;
+					fnlwgt.get("<="+fnlSplit)[1]++;
 				else
-					fnlwgt.get(">")[0]++;
-				education.get(dataItem.education)[0]++;
+					fnlwgt.get(">"+fnlSplit)[1]++;
+				education.get(dataItem.education)[1]++;
 				if(dataItem.educationNum<=eduNumSplit)
-					educationNum.get("<=")[0]++;
+					educationNum.get("<="+eduNumSplit)[1]++;
 				else
-					educationNum.get(">")[0]++;
-				occupation.get(dataItem.occupation)[0]++;
-				relationship.get(dataItem.relationship)[0]++;
-				race.get(dataItem.race)[0]++;
-				sex.get(dataItem.sex)[0]++;
+					educationNum.get(">"+eduNumSplit)[1]++;
+				occupation.get(dataItem.occupation)[1]++;
+				relationship.get(dataItem.relationship)[1]++;
+				race.get(dataItem.race)[1]++;
+				sex.get(dataItem.sex)[1]++;
+				maritalStatus.get(dataItem.maritalStatus)[1]++;
 				if(dataItem.capitalGain<=capGainSplit)
-					capitalGain.get("<=")[0]++;
+					capitalGain.get("<="+capGainSplit)[1]++;
 				else
-					capitalGain.get(">")[0]++;
+					capitalGain.get(">"+capGainSplit)[1]++;
 				if(dataItem.capitalLoss<=capLossSplit)
-					capitalLoss.get("<=")[0]++;
+					capitalLoss.get("<="+capLossSplit)[1]++;
 				else
-					capitalLoss.get(">")[0]++;
+					capitalLoss.get(">"+capLossSplit)[1]++;
 				if(dataItem.hoursPerWeek<=hoursSplit)
-					hoursPerWeek.get("<=")[0]++;
+					hoursPerWeek.get("<="+hoursSplit)[1]++;
 				else
-					hoursPerWeek.get(">")[0]++;
-				nativeCountry.get(dataItem.nativeCountry)[0]++;
+					hoursPerWeek.get(">"+hoursSplit)[1]++;
+				nativeCountry.get(dataItem.nativeCountry)[1]++;
 			}
 		}
 		
