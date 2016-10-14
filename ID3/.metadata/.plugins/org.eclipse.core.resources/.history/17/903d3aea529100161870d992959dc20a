@@ -236,5 +236,6 @@ class DataCount{
 				nativeCountry.get(dataItem.nativeCountry)[0]++;
 			}
 		}
+		
 	}
 }
