@@ -22,7 +22,7 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
