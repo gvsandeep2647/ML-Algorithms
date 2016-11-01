@@ -1,6 +1,7 @@
 package machinelearning;
 import java.io.*;
 import java.util.*;
+
 /**
  * @author Sandeep,Snehal,Kushagra,Tanmay
  * AIM : To implement and find the efficiency of ID3 algorithm on a particular Dataset.
@@ -16,6 +17,9 @@ public class ID3 {
         }
         DataCount firstLevel = new DataCount();
         firstLevel.updateValues(calcSplit(data,"age"),calcSplit(data,"fnlwgt"),calcSplit(data,"educationNum"),calcSplit(data,"capitalGain"),calcSplit(data,"capitalLoss"),calcSplit(data,"hoursPerWeek"),data);
+        TreeBuilder tree = new TreeBuilder();
+        List<String> attributes = Arrays.asList("age","workClass","fnlwgt","education","educationNum","maritalStatus","occupation","relationship","race","sex","capitalGain","capitalLoss","hoursPerWeek","nativeCountry");
+        tree.findRoot(firstLevel,attributes);
   	}
   	/**
   	 * @throws IOException
