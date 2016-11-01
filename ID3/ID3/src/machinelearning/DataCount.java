@@ -25,7 +25,7 @@ class DataCount{
 		
 	//age is continuous. Split appropriately.
 		
-	workClass.put("Private", new int[] {0,0});
+	workClass.put("Private", new int[2]);
 	workClass.put("Self-emp-not-inc",new int[2]);
 	workClass.put("Self-emp-inc",new int[2]);
 	workClass.put("Federal-giv",new int[2]);
@@ -149,7 +149,7 @@ class DataCount{
 	 * @param capLossSplit
 	 * @param hoursSplit
 	 * 
-	 * Updates the value of Maps on the basis if data and stores the count of +ve and -ve examples associated with the following features
+	 * Updates the value of Maps on the basis of data and stores the count of +ve and -ve examples associated with the following features
 	 */
 	public static void updateValues(int ageSplit,int fnlSplit,int eduNumSplit,int capGainSplit,int capLossSplit,int hoursSplit,ArrayList<DataSet> data)
 	{
