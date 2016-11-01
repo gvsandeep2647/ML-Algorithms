@@ -75,7 +75,7 @@ public class ID3 {
   	
   	/**
   	 * @param data
-  	 * @param param
+  	 * @param param 
   	 * @return split
   	 * Calculates where split should happen in continuous variables based on the gini index
   	 */
