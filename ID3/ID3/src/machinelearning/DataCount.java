@@ -2,7 +2,8 @@ package machinelearning;
 
 import java.util.*;
 
-/*
+/**
+ * @author Sandeep, Snehal
  * DataCount is an object that stores the count of +,- examples for each feature of each attribute
  * the value of each key is int[], 0th index stores count for "<=50k" and 1st index stores count for ">50k"
  */
@@ -25,10 +26,10 @@ class DataCount{
 		
 	//age is continuous. Split appropriately.
 	
-	workClass.put("Private", new int[] {0,0});
+	workClass.put("Private", new int[2]);
 	workClass.put("Self-emp-not-inc",new int[2]);
 	workClass.put("Self-emp-inc",new int[2]);
-	workClass.put("Federal-giv",new int[2]);
+	workClass.put("Federal-gov",new int[2]);
 	workClass.put("Local-gov",new int[2]);
 	workClass.put("State-gov",new int[2]);
 	workClass.put("Without-pay",new int[2]);
@@ -82,7 +83,7 @@ class DataCount{
 	relationship.put("Own-child", new int[2]);
 	relationship.put("Husband", new int[2]);
 	relationship.put("Not-in-family", new int[2]);
-	relationship.put("other-relative", new int[2]);
+	relationship.put("Other-relative", new int[2]);
 	relationship.put("Unmarried", new int[2]);
 	
 	race.put("White", new int[2]);
@@ -182,7 +183,6 @@ public void updateValues(int ageSplit,int fnlSplit,int eduNumSplit,int capGainSp
 				fnlwgt.get("<="+fnlSplit)[0]++;
 			else
 				fnlwgt.get(">"+fnlSplit)[0]++;
-			education.get("Bachelors")[0]++;
 			workClass.get(dataItem.workClass)[0]++;
 			if(dataItem.educationNum<=eduNumSplit)
 				educationNum.get("<="+eduNumSplit)[0]++;
