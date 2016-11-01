@@ -18,9 +18,10 @@ public class TreeBuilder {
 		    indiEntropy[i] = -temp1*Math.log(temp1)-temp2*Math.log(temp2);
 		    i++;
 		}
+		double sum = 0.0;
 		for(int j = 0;j<indiEntropy.length;j++ )
 		{
-			
+			sum += indiEntropy[j];
 		}
 		return entropy;
 	}
