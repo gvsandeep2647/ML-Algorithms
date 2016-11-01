@@ -190,6 +190,7 @@ public void updateValues(int ageSplit,int fnlSplit,int eduNumSplit,int capGainSp
 				educationNum.get(">"+eduNumSplit)[0]++;
 			occupation.get(dataItem.occupation)[0]++;
 			relationship.get(dataItem.relationship)[0]++;
+			education.get(dataItem.education)[0]++;
 			race.get(dataItem.race)[0]++;
 			sex.get(dataItem.sex)[0]++;
 			maritalStatus.get(dataItem.maritalStatus)[0]++;
