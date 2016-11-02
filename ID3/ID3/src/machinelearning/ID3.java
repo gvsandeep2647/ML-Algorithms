@@ -30,6 +30,14 @@ public class ID3 {
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
         
         formMatrix();
+        
+        
+        for(int i=0;i<14;i++)
+    	{
+        	AttributeEntropy attEnt = new AttributeEntropy(i);
+        	attEnt.updateFields(i, matrix);
+        	attEnt.printMap();
+    	}
   	}
   	public static void formMatrix(){
   		int i = 0 ;
@@ -60,7 +68,7 @@ public class ID3 {
 				matrix[i][1] = 7;
   			
   			
-  			if(dataItem.fnlwgt<fnlSplit)
+  			if(dataItem.fnlwgt<=fnlSplit)
   				matrix[i][2] = 0;
   			else
   				matrix[i][2] = 1;
