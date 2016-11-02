@@ -19,7 +19,7 @@ public class ID3 {
         firstLevel.updateValues(calcSplit(data,"age"),calcSplit(data,"fnlwgt"),calcSplit(data,"educationNum"),calcSplit(data,"capitalGain"),calcSplit(data,"capitalLoss"),calcSplit(data,"hoursPerWeek"),data);
         TreeBuilder tree = new TreeBuilder();
         List<String> attributes = Arrays.asList("age","workClass","fnlwgt","education","educationNum","maritalStatus","occupation","relationship","race","sex","capitalGain","capitalLoss","hoursPerWeek","nativeCountry");
-        tree.findRoot(firstLevel,attributes);
+        System.out.println(tree.findRoot(firstLevel,attributes));
   	}
   	/**
   	 * @throws IOException
