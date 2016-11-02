@@ -35,8 +35,9 @@ public class ID3 {
         for(int i=0;i<14;i++)
     	{
         	AttributeEntropy attEnt = new AttributeEntropy(i);
-        	attEnt.updateFields(i, matrix);
+        	attEnt.updateFields(matrix);
         	attEnt.printMap();
+        	attEnt.calcEntropy();
     	}
   	}
   	public static void formMatrix(){
@@ -345,10 +346,13 @@ public class ID3 {
             	 if(nativeCountry.equals("?"))
             		 flag = 0;
             	 income = st.nextToken();
+            	 
              }
              if(flag==1)
             	 data.add(new DataSet(age,workClass,fnlwgt,education,educationNum,maritalStatus,occupation,relationship,race,sex,capitalGain,capitalLoss,hoursPerWeek,nativeCountry,income));
+             
          }
+         
          br.close();
   	}
   	
