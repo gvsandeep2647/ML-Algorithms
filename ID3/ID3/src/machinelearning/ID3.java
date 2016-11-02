@@ -30,13 +30,21 @@ public class ID3 {
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
         
         formMatrix();
+        
+        
+        for(int i=0;i<14;i++)
+    	{
+        	AttributeEntropy attEnt = new AttributeEntropy(i);
+        	attEnt.updateFields(i, matrix);
+        	attEnt.printMap();
+    	}
   	}
   	public static void formMatrix(){
   		int i = 0 ;
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
   			DataSet dataItem = (DataSet) iterator.next();
   			
-  			if(dataItem.age<ageSplit)
+  			if(dataItem.age<=ageSplit)
   				matrix[i][0] = 0;
   			else
   				matrix[i][0] = 1;
@@ -60,7 +68,7 @@ public class ID3 {
 				matrix[i][1] = 7;
   			
   			
-  			if(dataItem.fnlwgt<fnlSplit)
+  			if(dataItem.fnlwgt<=fnlSplit)
   				matrix[i][2] = 0;
   			else
   				matrix[i][2] = 1;
@@ -100,7 +108,7 @@ public class ID3 {
 				matrix[i][3]=15;
   			
   			
-  			if(dataItem.educationNum<eduNumSplit)
+  			if(dataItem.educationNum<=eduNumSplit)
   				matrix[i][4] = 0;
   			else
   				matrix[i][4] = 1;
@@ -183,19 +191,19 @@ public class ID3 {
   				matrix[i][9]=1;
   			
   			
-  			if(dataItem.capitalGain<capitalGainSplit)
+  			if(dataItem.capitalGain<=capitalGainSplit)
   				matrix[i][10] = 0;
   			else
   				matrix[i][10] = 1;
   			
   			
-  			if(dataItem.capitalLoss<capitalLossSplit)
+  			if(dataItem.capitalLoss<=capitalLossSplit)
   				matrix[i][11] = 0;
   			else
   				matrix[i][11] = 1;
   			
   			
-  			if(dataItem.hoursPerWeek<hoursPerWeekSplit)
+  			if(dataItem.hoursPerWeek<=hoursPerWeekSplit)
   				matrix[i][12] = 0;
   			else
   				matrix[i][12] = 1;
