@@ -346,9 +346,9 @@ public class ID3 {
   	
   	
   	/**
-  	 * @param data
-  	 * @param param 
-  	 * @return split
+  	 * @param data : Data passed as a list of DataSet Objects 
+  	 * @param param : parameter for which split is supposed to be calculated 
+  	 * @return split : returns the value on which split should happen 
   	 * Calculates where split should happen in continuous variables based on the gini index
   	 */
   	public static int calcSplit(ArrayList<DataSet> data, String param){
