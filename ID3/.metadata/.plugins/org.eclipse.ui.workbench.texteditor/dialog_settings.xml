@@ -2,16 +2,18 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="adult.txt" key="selection"/>
+		<item value="calcEntropy" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="printMap"/>
 			<item value="adult.txt"/>
 			<item value="test.txt"/>
 		</list>
 		<list key="replacehistory">
+			<item value="calcEntropy"/>
 			<item value="adult.txt"/>
 		</list>
 	</section>
