@@ -36,7 +36,7 @@ public class ID3 {
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
   			DataSet dataItem = (DataSet) iterator.next();
   			
-  			if(dataItem.age<ageSplit)
+  			if(dataItem.age<=ageSplit)
   				matrix[i][0] = 0;
   			else
   				matrix[i][0] = 1;
@@ -100,7 +100,7 @@ public class ID3 {
 				matrix[i][3]=15;
   			
   			
-  			if(dataItem.educationNum<eduNumSplit)
+  			if(dataItem.educationNum<=eduNumSplit)
   				matrix[i][4] = 0;
   			else
   				matrix[i][4] = 1;
@@ -183,19 +183,19 @@ public class ID3 {
   				matrix[i][9]=1;
   			
   			
-  			if(dataItem.capitalGain<capitalGainSplit)
+  			if(dataItem.capitalGain<=capitalGainSplit)
   				matrix[i][10] = 0;
   			else
   				matrix[i][10] = 1;
   			
   			
-  			if(dataItem.capitalLoss<capitalLossSplit)
+  			if(dataItem.capitalLoss<=capitalLossSplit)
   				matrix[i][11] = 0;
   			else
   				matrix[i][11] = 1;
   			
   			
-  			if(dataItem.hoursPerWeek<hoursPerWeekSplit)
+  			if(dataItem.hoursPerWeek<=hoursPerWeekSplit)
   				matrix[i][12] = 0;
   			else
   				matrix[i][12] = 1;
