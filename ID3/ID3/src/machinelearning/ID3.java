@@ -36,7 +36,6 @@ public class ID3 {
     	{
         	AttributeEntropy attEnt = new AttributeEntropy(i);
         	attEnt.updateFields(matrix);
-        	attEnt.printMap();
         	attEnt.calcEntropy();
     	}
   	}
