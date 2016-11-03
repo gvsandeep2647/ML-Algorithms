@@ -34,14 +34,7 @@ public class ID3 {
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
         }
-        System.out.println(findA(matrix,attEnt));        
-        /*for(int i=0;i<14;i++)
-    	{
-        	AttributeEntropy attEnt = new AttributeEntropy(i);
-        	attEnt.updateFields(matrix);
-        	attEnt.printMap();
-        	attEnt.calcEntropy();
-    	}*/
+        createDataSet((findA(matrix,attEnt)),matrix);        
   	}
   	
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
@@ -62,6 +55,25 @@ public class ID3 {
   			}
   		}
   		return A;
+  	}
+  	
+  	public static ArrayList<int[][]> createDataSet(int attribute,int matix[][]){
+  		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
+  		Set<Integer> setUniqueNumbers = new LinkedHashSet<Integer>();
+  		List<Integer> occurences = new ArrayList<Integer>();
+  		for(int x = 0;x<matrix.length;x++) {
+  		    setUniqueNumbers.add(matrix[x][attribute]);
+  		    occurences.add(matrix[x][attribute]);
+  		}
+  		for(int s: setUniqueNumbers){
+  			 System.out.println(s + " " +Collections.frequency(occurences,s));
+  			}
+  		int datamodel[][][] = new int[setUniqueNumbers.size()][][];
+  		for(int i = 0;i<matrix.length;i++)
+  		{
+  			
+  		}
+  		return matrices;
   	}
   	public static void formMatrix(){
   		int i = 0 ;
