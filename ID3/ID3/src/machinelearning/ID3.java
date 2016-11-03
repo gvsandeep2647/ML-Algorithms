@@ -23,7 +23,6 @@ public class ID3 {
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
-        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
@@ -51,13 +50,11 @@ public class ID3 {
   				Tree tempTree = new Tree(targetAttribute,i);
   				tempTree.addChild(14,0);
   				root.add(tempTree);
-  				System.out.println("*****"+targetAttribute+"********");
   			}
   			else if(base == 1){
   				Tree tempTree = new Tree(targetAttribute,i);
   				tempTree.addChild(14,1);
   				root.add(tempTree);
-  				System.out.println("------"+targetAttribute+"--------");
   			}
   			else{
   				int nextAttribute = findA(temp.get(i),attEnt);
