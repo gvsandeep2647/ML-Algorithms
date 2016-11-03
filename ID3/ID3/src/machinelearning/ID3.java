@@ -15,7 +15,7 @@ public class ID3 {
 	static int capitalLossSplit;
 	static int hoursPerWeekSplit;
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
-	public static int matrix[][] = new int[19][15];
+	public static int matrix[][] = new int[30162][15];
   	public static void main(String[] args) {
         try{
         	inputHandle();
@@ -43,6 +43,7 @@ public class ID3 {
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
+  		attEnt.get(targetAttribute).flag = false;
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
   			if(base == -1){
@@ -58,14 +59,11 @@ public class ID3 {
   			else{
   				int nextAttribute = findA(temp.get(i),attEnt);
   				Tree tempTree = new Tree(targetAttribute,i);
-  				System.out.println(targetAttribute+" "+i+" "+temp.get(i).length);
   				if(nextAttribute==-1){
-  					
+  					System.out.println("******"+temp.get(i).length);
   				}
   				else{
-  					ArrayList<AttributeEntropy> nextAttEnt = copy(attEnt);
-  					nextAttEnt.get(targetAttribute).flag = false;
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,attEnt);
 	  				root.add(tempTree);
   				}
   			}
@@ -100,11 +98,10 @@ public class ID3 {
   	
   	/**
   	 * @param attribute : The attribute on the basis of which we are dividing the data matrix 
-  	 * @param matix : The matrix containing the data
+  	 * @param matrix : The matrix containing the data
   	 * @return An ArrayList of Matrices with data divided according to the unique values that the passed argument attribute can take.
   	 */
-  	public static ArrayList<int[][]> createDataSet(int attribute,int matix[][]){
-  		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
+  	public static ArrayList<int[][]> createDataSet(int attribute,int matrix[][]){
   		Set<Integer> setUniqueNumbers = new LinkedHashSet<Integer>();
   		List<Integer> occurences = new ArrayList<Integer>();
   		DataRef dr = new DataRef();
@@ -121,7 +118,7 @@ public class ID3 {
 		}
   		
   		int indexCount[] = new int[dr.attrRef[attribute].length];
-  		for(int i =0;i<matix.length;i++)
+  		for(int i =0;i<matrix.length;i++)
   		{
   			for(int j=0;j<15;j++)
   			{
@@ -129,10 +126,10 @@ public class ID3 {
   			}
   			indexCount[matrix[i][attribute]]++;
   		}
-  		
-  		for(int i = 0;i<setUniqueNumbers.size();i++)
+  		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
+  		for(int i = 0;i<dr.attrRef[attribute].length;i++)
 			matrices.add(datamodel[i]);
-  		
+  		System.out.println(dr.majorRef[attribute]+" "+matrices.size());
   		return matrices;
   	}
   	/**
@@ -401,7 +398,7 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
@@ -448,9 +445,7 @@ public class ID3 {
              }
              if(flag==1)
             	 data.add(new DataSet(age,workClass,fnlwgt,education,educationNum,maritalStatus,occupation,relationship,race,sex,capitalGain,capitalLoss,hoursPerWeek,nativeCountry,income));
-             
-         }
-         
+         }       
          br.close();
   	}
   	
@@ -554,16 +549,6 @@ public class ID3 {
   		}
   		else
   			return 0;
-  	}
-  	
-  	public static ArrayList<AttributeEntropy> copy(ArrayList<AttributeEntropy> a){
-  		ArrayList<AttributeEntropy> cp = new ArrayList<AttributeEntropy>();
-  		for(int i=0;i<a.size();i++){
-  			AttributeEntropy temp = new AttributeEntropy(a.get(i).attribute);
-  			temp.flag = a.get(i).flag;
-  			cp.add(temp);
-  		}
-  		return cp;
   	}
 }
 

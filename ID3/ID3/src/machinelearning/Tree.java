@@ -68,7 +68,6 @@ public class Tree {
 				q.add(temp.children.get(i));
 				System.out.println("Parent:"+temp.attribute+"-"+temp.value+" "+" Child:"+temp.children.get(i).attribute+"-"+temp.children.get(i).value+" ");
 			}
-			System.out.println("");
 		}
 	}
 }

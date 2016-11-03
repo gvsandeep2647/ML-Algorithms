@@ -3,7 +3,6 @@ import java.util.*;
 
 /**
  * A class which used for calculating the entropy of a given attribute in the passed dataset.
- *
  */
 public class AttributeEntropy {
 	public int attribute;
