@@ -1,5 +1,9 @@
 package machinelearning;
 
+/**
+ * A class which stores the original values of the attributes.
+ * Used as a reference class to get back the original string of the attribute based on the value as in the matrix  
+ */
 public class DataRef {
 	public String majorRef[] = new String[15];
 	public String attrRef[][] = new String[15][];

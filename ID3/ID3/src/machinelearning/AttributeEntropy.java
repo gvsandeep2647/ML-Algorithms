@@ -1,6 +1,10 @@
 package machinelearning;
 import java.util.*;
 
+/**
+ * A class which used for calculating the entropy of a given attribute in the passed dataset.
+ *
+ */
 public class AttributeEntropy {
 	public int attribute;
 	public Map<Integer,int[]> diversity;
@@ -12,7 +16,12 @@ public class AttributeEntropy {
 		diversity = new HashMap<Integer,int[]>();
 		entropy = 0.0;
 	}
-		
+	
+	/**
+	 * @param matrix : Dataset
+	 * Updates the values of the maps which contain the attribute value as a key and the corresponding array of positive and negative count as value
+	 */
+
 	public void updateFields(int matrix[][]){
 		diversity = new HashMap<Integer,int[]>();
 		for(int i=0;i<matrix.length;i++){
@@ -34,6 +43,9 @@ public class AttributeEntropy {
 		}
 	}
 	
+	/**
+	 * Updates the class variable entropy by calculating the entropy of the attribute
+	 */
 	public void calcEntropy() {
 		double indiEntropy[] =  new double[diversity.size()];
 		int sum_value=0;
@@ -52,9 +64,12 @@ public class AttributeEntropy {
 		}
 		
 		entropy = entropy/sum_value;
-		
 	}
 	
+	/**
+	 * utility function
+	 * Used for printing the Map
+	 */
 	public void printMap(){
 		for(Map.Entry<Integer, int[]> entry : diversity.entrySet()){
 			int []value = entry.getValue();

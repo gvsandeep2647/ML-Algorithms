@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * @author Sandeep,Snehal,Kushagra,Tanmay
+ * @author Sandeep,Snehal,Kushagra,Tanmaya
  * AIM : To implement and find the efficiency of ID3 algorithm on a particular Dataset.
  */
 
@@ -74,6 +74,11 @@ public class ID3 {
   		return root;
   	}
   	
+  	/**
+  	 * @param matrix : DataSet 
+  	 * @param attEnt : attEnt , An array of objects which contain the entropy of each attribute 
+  	 * @return the attribute with the lowest entropy. 
+  	 */
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
   		for(int i=0;i<14;i++){
   			if(attEnt.get(i).flag){
@@ -94,6 +99,11 @@ public class ID3 {
   		return A;
   	}
   	
+  	/**
+  	 * @param attribute : The attribute on the basis of which we are dividing the data matrix 
+  	 * @param matix : The matrix containing the data
+  	 * @return An ArrayList of Matrices with data divided according to the unique values that the passed argument attribute can take.
+  	 */
   	public static ArrayList<int[][]> createDataSet(int attribute,int matix[][]){
   		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
   		Set<Integer> setUniqueNumbers = new LinkedHashSet<Integer>();
@@ -126,6 +136,9 @@ public class ID3 {
   		
   		return matrices;
   	}
+  	/**
+  	 * Populates the class variable matrix with the values as mentioned in the DataRef class. Aim is to make all the attributes numeric which will make data handling easy
+  	 */
   	public static void formMatrix(){
   		int i = 0 ;
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
