@@ -1,6 +1,10 @@
 package machinelearning;
 import java.util.*;
 
+/**
+ *  A Node of the tree 
+ *	Contains : Attribute , value and the list of children
+ */
 public class Tree {
 	String attribute;
 	String value;
@@ -16,11 +20,21 @@ public class Tree {
 		children = new ArrayList<Tree>();
 	}
 		
+	/**
+	 * @param attribute : The attribute of the child (Next Level)
+	 * @param value : The value of the attribute
+	 * adds another node as a child of the current node. 
+	 */
 	public void addChild(int attribute, int value){
 		Tree node = new Tree(attribute, value);
 		this.children.add(node);
 	}
 	
+	/**
+	 * @param attribute : The attribute amongst whose children the desired value lies.
+	 * @param value : The value that we are searching
+	 * @return the required node
+	 */
 	public Tree searchChild(int attribute, int value){
 		Tree node;
 		if(this.children.isEmpty()){
@@ -40,6 +54,9 @@ public class Tree {
 		}
 	}
 	
+	/**
+	 * An Utility function to print the tree in a rather unconventional way for better understanding
+	 */
 	public void printTree(){
 		Queue<Tree> q = new LinkedList<Tree>();
 		q.add(this);
