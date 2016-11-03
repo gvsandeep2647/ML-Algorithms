@@ -65,14 +65,25 @@ public class ID3 {
   		    setUniqueNumbers.add(matrix[x][attribute]);
   		    occurences.add(matrix[x][attribute]);
   		}
-  		for(int s: setUniqueNumbers){
-  			 System.out.println(s + " " +Collections.frequency(occurences,s));
-  			}
   		int datamodel[][][] = new int[setUniqueNumbers.size()][][];
-  		for(int i = 0;i<matrix.length;i++)
+  		
+  		for(int s: setUniqueNumbers){
+  			datamodel[s] = new int[Collections.frequency(occurences,s)][15];
+		}
+  		
+  		int indexCount[] = new int[setUniqueNumbers.size()];
+  		for(int i =0;i<matix.length;i++)
   		{
-  			
+  			for(int j=0;j<15;j++)
+  			{
+  				datamodel[matrix[i][attribute]][indexCount[matrix[i][attribute]]][j] = matrix[i][j];
+  			}
+  			indexCount[matrix[i][attribute]]++;
   		}
+  		
+  		for(int i = 0;i<setUniqueNumbers.size();i++)
+			matrices.add(datamodel[i]);
+  		
   		return matrices;
   	}
   	public static void formMatrix(){
