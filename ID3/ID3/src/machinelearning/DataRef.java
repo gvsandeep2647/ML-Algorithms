@@ -8,16 +8,16 @@ public class DataRef {
 		majorRef[1] = "workClass";
 		majorRef[2] = "fnlwgt";
 		majorRef[3] = "education";
-		majorRef[4] = "education-num";
-		majorRef[5] = "marital-status";
+		majorRef[4] = "educationNum";
+		majorRef[5] = "maritalStatus";
 		majorRef[6] = "occupation";
 		majorRef[7] = "relationship";
 		majorRef[8] = "race";
 		majorRef[9] = "sex";
-		majorRef[10] = "capital-gain";
-		majorRef[11] = "capital-loss";
-		majorRef[12] = "hours-per-week";
-		majorRef[13] = "native-country";
+		majorRef[10] = "capitalGain";
+		majorRef[11] = "capitalLoss";
+		majorRef[12] = "hoursPerWeek";
+		majorRef[13] = "nativeCountry";
 		majorRef[14] = "result";
 		
 		attrRef[0] = new String[2];
