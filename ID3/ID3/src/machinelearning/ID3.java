@@ -43,7 +43,6 @@ public class ID3 {
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
-  		attEnt.get(targetAttribute).flag = false;
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
   			if(base == -1){
@@ -59,11 +58,14 @@ public class ID3 {
   			else{
   				int nextAttribute = findA(temp.get(i),attEnt);
   				Tree tempTree = new Tree(targetAttribute,i);
+  				System.out.println(targetAttribute+" "+i+" "+temp.get(i).length);
   				if(nextAttribute==-1){
-  					System.out.println("       "+temp.get(i).length);
+  					
   				}
   				else{
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,attEnt);
+  					ArrayList<AttributeEntropy> nextAttEnt = copy(attEnt);
+  					nextAttEnt.get(targetAttribute).flag = false;
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
 	  				root.add(tempTree);
   				}
   			}
@@ -552,6 +554,16 @@ public class ID3 {
   		}
   		else
   			return 0;
+  	}
+  	
+  	public static ArrayList<AttributeEntropy> copy(ArrayList<AttributeEntropy> a){
+  		ArrayList<AttributeEntropy> cp = new ArrayList<AttributeEntropy>();
+  		for(int i=0;i<a.size();i++){
+  			AttributeEntropy temp = new AttributeEntropy(a.get(i).attribute);
+  			temp.flag = a.get(i).flag;
+  			cp.add(temp);
+  		}
+  		return cp;
   	}
 }
 
