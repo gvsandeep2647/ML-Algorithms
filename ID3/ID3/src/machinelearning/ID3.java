@@ -15,7 +15,7 @@ public class ID3 {
 	static int capitalLossSplit;
 	static int hoursPerWeekSplit;
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
-	public static int matrix[][] = new int[30162][15];
+	public static int matrix[][] = new int[19][15];
   	public static void main(String[] args) {
         try{
         	inputHandle();
@@ -23,6 +23,7 @@ public class ID3 {
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
+        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
@@ -34,7 +35,43 @@ public class ID3 {
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
         }
-        createDataSet((findA(matrix,attEnt)),matrix);        
+        int firstAttribute = findA(matrix,attEnt);
+        Tree root = new Tree(firstAttribute,-1);
+        root.children = runID3(matrix,firstAttribute,attEnt);
+        root.printTree();
+  	}
+  	
+  	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
+  		ArrayList<Tree> root = new ArrayList<Tree>();
+  		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
+  		attEnt.get(targetAttribute).flag = false;
+  		for(int i=0;i<temp.size();i++){
+  			int base = checkPN(temp.get(i));
+  			if(base == -1){
+  				Tree tempTree = new Tree(targetAttribute,i);
+  				tempTree.addChild(14,0);
+  				root.add(tempTree);
+  				System.out.println("*****"+targetAttribute+"********");
+  			}
+  			else if(base == 1){
+  				Tree tempTree = new Tree(targetAttribute,i);
+  				tempTree.addChild(14,1);
+  				root.add(tempTree);
+  				System.out.println("------"+targetAttribute+"--------");
+  			}
+  			else{
+  				int nextAttribute = findA(temp.get(i),attEnt);
+  				Tree tempTree = new Tree(targetAttribute,i);
+  				if(nextAttribute==-1){
+  					System.out.println("       "+temp.get(i).length);
+  				}
+  				else{
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,attEnt);
+	  				root.add(tempTree);
+  				}
+  			}
+  		}
+  		return root;
   	}
   	
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
@@ -45,7 +82,7 @@ public class ID3 {
   			}
   		}
   		int A=-1;
-  		double min = 1.0;
+  		double min = 5.0;
   		for(int i=0;i<14;i++){
   			if(attEnt.get(i).flag){
   				if(attEnt.get(i).entropy<min){
@@ -61,17 +98,20 @@ public class ID3 {
   		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
   		Set<Integer> setUniqueNumbers = new LinkedHashSet<Integer>();
   		List<Integer> occurences = new ArrayList<Integer>();
+  		DataRef dr = new DataRef();
   		for(int x = 0;x<matrix.length;x++) {
   		    setUniqueNumbers.add(matrix[x][attribute]);
   		    occurences.add(matrix[x][attribute]);
   		}
-  		int datamodel[][][] = new int[setUniqueNumbers.size()][][];
-  		
+  		int datamodel[][][] = new int[dr.attrRef[attribute].length][][];
+  		for(int i = 0;i<dr.attrRef[attribute].length;i++){
+  			datamodel[i] = new int[0][15];
+  		}
   		for(int s: setUniqueNumbers){
   			datamodel[s] = new int[Collections.frequency(occurences,s)][15];
 		}
   		
-  		int indexCount[] = new int[setUniqueNumbers.size()];
+  		int indexCount[] = new int[dr.attrRef[attribute].length];
   		for(int i =0;i<matix.length;i++)
   		{
   			for(int j=0;j<15;j++)
@@ -349,7 +389,7 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
@@ -488,4 +528,20 @@ public class ID3 {
   		}
   		return split;
   	}  	
+  	
+  	public static int checkPN(int matrix[][]){
+  		int result = 0;
+  		for(int i=0;i<matrix.length;i++){
+  			result = result + matrix[i][14];
+  		}
+  		if(result==0){
+  			return -1;
+  		}
+  		else if(result == matrix.length){
+  			return 1;
+  		}
+  		else
+  			return 0;
+  	}
 }
+

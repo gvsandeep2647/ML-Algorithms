@@ -12,8 +12,9 @@ public class AttributeEntropy {
 		diversity = new HashMap<Integer,int[]>();
 		entropy = 0.0;
 	}
-	
+		
 	public void updateFields(int matrix[][]){
+		diversity = new HashMap<Integer,int[]>();
 		for(int i=0;i<matrix.length;i++){
 			if(!diversity.containsKey(ID3.matrix[i][attribute]))
 			{
