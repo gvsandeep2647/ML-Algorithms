@@ -30,15 +30,38 @@ public class ID3 {
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
         
         formMatrix();
-        
-        
-        for(int i=0;i<14;i++)
+        ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
+        for(int i = 0;i<14;i++){
+        	attEnt.add(new AttributeEntropy(i));
+        }
+        System.out.println(findA(matrix,attEnt));        
+        /*for(int i=0;i<14;i++)
     	{
         	AttributeEntropy attEnt = new AttributeEntropy(i);
         	attEnt.updateFields(matrix);
         	attEnt.printMap();
         	attEnt.calcEntropy();
-    	}
+    	}*/
+  	}
+  	
+  	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
+  		for(int i=0;i<14;i++){
+  			if(attEnt.get(i).flag){
+  				attEnt.get(i).updateFields(matrix);
+  				attEnt.get(i).calcEntropy();
+  			}
+  		}
+  		int A=-1;
+  		double min = 1.0;
+  		for(int i=0;i<14;i++){
+  			if(attEnt.get(i).flag){
+  				if(attEnt.get(i).entropy<min){
+  					min = attEnt.get(i).entropy;
+  					A = attEnt.get(i).attribute;
+  				}
+  			}
+  		}
+  		return A;
   	}
   	public static void formMatrix(){
   		int i = 0 ;

@@ -51,7 +51,7 @@ public class AttributeEntropy {
 		}
 		
 		entropy = entropy/sum_value;
-		System.out.println("entropy: "+entropy);
+		System.out.println("attr:"+attribute+" entropy: "+entropy);
 	}
 	
 	public void printMap(){
