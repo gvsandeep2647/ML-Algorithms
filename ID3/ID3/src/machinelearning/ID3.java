@@ -15,10 +15,12 @@ public class ID3 {
 	static int capitalLossSplit;
 	static int hoursPerWeekSplit;
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
+	public static ArrayList<DataSet> testData = new ArrayList<DataSet>();
 	public static int matrix[][] = new int[30162][15];
-  	public static void main(String[] args) {
+	public static int testMatrix[][] = new int[15060][15];
+	public static void main(String[] args) {
         try{
-        	inputHandle();
+        	inputHandle("adult.txt",data);
         }catch(Exception e){
         	System.out.println(e);
         }
@@ -29,7 +31,7 @@ public class ID3 {
         capitalLossSplit = calcSplit(data,"capitalLoss");
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
         
-        formMatrix();
+        formMatrix(matrix);
         ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
@@ -38,10 +40,31 @@ public class ID3 {
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
         root.printTree();
+        
+        try{
+        	inputHandle("testing.txt",testData);
+        }catch(Exception e){
+        	System.out.println(e);
+        }
+        formMatrix(testMatrix);
+        calcAccuracy(testMatrix,root);
   	}
   	
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
+  		int positive=0,negative=0;
+  		AttributeEntropy tempAtt = attEnt.get(targetAttribute);
+  		for(int i = 0;i<tempAtt.diversity.size();i++)
+  		{	
+  			try{
+  			positive += tempAtt.diversity.get(i)[1];
+  			negative += tempAtt.diversity.get(i)[0];
+  			}catch(Exception e){
+  				;
+  			}
+  			
+  		}
+  		System.out.println("***********"+tempAtt.attribute+" "+positive+" "+negative);
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
@@ -78,6 +101,12 @@ public class ID3 {
 	  				root.add(tempTree);
   				}
   			}
+  			else if(base==2){
+  				Tree tempTree = new Tree(targetAttribute,i);
+  				int baseVal = (negative>=positive)?0:1;
+  				tempTree.addChild(14,baseVal);
+  				root.add(tempTree);
+  			}
   		}
   		return root;
   	}
@@ -89,10 +118,8 @@ public class ID3 {
   	 */
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
   		for(int i=0;i<14;i++){
-  			if(attEnt.get(i).flag){
   				attEnt.get(i).updateFields(matrix);
   				attEnt.get(i).calcEntropy();
-  			}
   		}
   		int A=-1;
   		double min = 5.0;
@@ -146,7 +173,7 @@ public class ID3 {
   	/**
   	 * Populates the class variable matrix with the values as mentioned in the DataRef class. Aim is to make all the attributes numeric which will make data handling easy
   	 */
-  	public static void formMatrix(){
+  	public static void formMatrix(int [][]matrix){
   		int i = 0 ;
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
   			DataSet dataItem = (DataSet) iterator.next();
@@ -403,13 +430,26 @@ public class ID3 {
   			i++;
   		}
   	}
+  	public static double calcAccuracy(int[][] testData,Tree root){
+  		double accuracy = 0.0;
+  		int result[] = new int[2];
+  		for (int i=0;i<testData.length;i++) {
+			 int dataSet[] = testData[i];
+			if(root.traversal(dataSet)==1)
+				result[1]++;
+			else
+				result[0]++;
+		}
+  		accuracy = (double)result[1]/result.length;
+  		return accuracy;
+  	}
   	
   	/**
   	 * @throws IOException
   	 * Reads the data from the text file and stores it in the object.
   	 */
-  	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
+  	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {
+  		 BufferedReader br = new BufferedReader(new FileReader(filename));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
@@ -550,7 +590,7 @@ public class ID3 {
   	public static int checkPN(int matrix[][]){
   		int result = 0;
   		if(matrix.length == 0){
-  			return -1;
+  			return 2;
   		}
   		for(int i=0;i<matrix.length;i++){
   			result = result + matrix[i][14];
@@ -561,6 +601,7 @@ public class ID3 {
   		else if(result == matrix.length){
   			return 1;
   		}
+  		
   		else
   			return 0;
   	}
