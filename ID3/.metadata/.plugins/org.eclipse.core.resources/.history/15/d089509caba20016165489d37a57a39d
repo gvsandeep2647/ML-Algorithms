@@ -77,14 +77,14 @@ public class DataRef {
 		//attrRef[6][0] = "Tech-support";
 		attrRef[6][1] = "Craft-repair";
 		attrRef[6][2] = "Other-service";
-		//attrRef[6][3] = "Sales";
+		attrRef[6][3] = "Sales";
 		attrRef[6][4] = "Exec-managerial";
 		attrRef[6][5] = "Prof-specialty";
 		attrRef[6][6] = "Handlers-cleaners";
 		attrRef[6][7] = "Machine-op-inspct";
-		//attrRef[6][8] = "Adm-clerical";
+		attrRef[6][8] = "Adm-clerical";
 		attrRef[6][9] = "Farming-fishing";
-		//attrRef[6][10] = "Transport-moving";
+		attrRef[6][10] = "Transport-moving";
 		attrRef[6][11] = "Priv-house-serv";
 		attrRef[6][12] = "Protective-serv";
 		attrRef[6][13] = "Armed-Forces";

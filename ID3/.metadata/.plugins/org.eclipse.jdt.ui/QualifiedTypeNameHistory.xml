@@ -7,10 +7,12 @@
 <fullyQualifiedTypeName name="javax.print.attribute.HashAttributeSet"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="machinelearning.ID3"/>
-<fullyQualifiedTypeName name="machinelearning.AttributeEntropy"/>
 <fullyQualifiedTypeName name="java.util.Map.Entry"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.lang.Integer"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="machinelearning.AttributeEntropy"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="machinelearning.DataSet"/>
+<fullyQualifiedTypeName name="java.time.temporal.Temporal"/>
 </qualifiedTypeNameHistroy>
