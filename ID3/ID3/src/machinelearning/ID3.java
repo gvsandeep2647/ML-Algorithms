@@ -40,7 +40,7 @@ public class ID3 {
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
-        //root.printTree();
+        root.printTree();
         
         try{
         	inputHandle("testing.txt",testData);
