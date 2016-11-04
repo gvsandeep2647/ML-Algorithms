@@ -15,7 +15,7 @@ public class ID3 {
 	static int capitalLossSplit;
 	static int hoursPerWeekSplit;
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
-	public static int matrix[][] = new int[19][15];
+	public static int matrix[][] = new int[30162][15];
   	public static void main(String[] args) {
         try{
         	inputHandle();
@@ -23,7 +23,6 @@ public class ID3 {
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
-        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
@@ -47,7 +46,7 @@ public class ID3 {
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
-  			System.out.println(temp.get(i).length+" "+targetAttribute+" "+i+" base:"+base);
+  			//System.out.println(temp.get(i).length+" "+targetAttribute+" "+i+" base:"+base);
   			if(base == -1){
   				Tree tempTree = new Tree(targetAttribute,i);
   				tempTree.addChild(14,0);
@@ -410,7 +409,7 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
@@ -551,7 +550,7 @@ public class ID3 {
   	public static int checkPN(int matrix[][]){
   		int result = 0;
   		if(matrix.length == 0){
-  			return 2;
+  			return -1;
   		}
   		for(int i=0;i<matrix.length;i++){
   			result = result + matrix[i][14];
