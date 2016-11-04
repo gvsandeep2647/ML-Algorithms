@@ -1,4 +1,5 @@
 package machinelearning;
+import java.time.temporal.Temporal;
 import java.util.*;
 
 /**
@@ -62,8 +63,14 @@ public class Tree {
 		int value = 0;
 		int currAttr = this.intAttr;
 		Tree tempNode = searchChild(currAttr,data[currAttr]);
-		while(currAttr!=14){
-			
+		while(true){
+			currAttr = tempNode.children.get(0).intAttr;
+			if(currAttr==14){
+				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
+				break;
+			}else{
+				tempNode = searchChild(currAttr,data[currAttr]);
+			}
 		}
 		return value;
 	}

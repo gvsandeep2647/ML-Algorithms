@@ -25,13 +25,14 @@ public class ID3 {
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
+        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
         capitalLossSplit = calcSplit(data,"capitalLoss");
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
         
-        formMatrix(matrix);
+        formMatrix(matrix,data);
         ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
@@ -39,14 +40,15 @@ public class ID3 {
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
-        root.printTree();
+        //root.printTree();
         
         try{
         	inputHandle("testing.txt",testData);
         }catch(Exception e){
         	System.out.println(e);
         }
-        formMatrix(testMatrix);
+        
+        formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
   	}
   	
@@ -64,7 +66,6 @@ public class ID3 {
   			}
   			
   		}
-  		System.out.println("***********"+tempAtt.attribute+" "+positive+" "+negative);
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
@@ -94,7 +95,7 @@ public class ID3 {
   				System.out.println("");*/
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
-  					System.out.println("******"+temp.get(i).length);
+  					//System.out.println("******"+temp.get(i).length);
   				}
   				else{
 	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
@@ -173,8 +174,9 @@ public class ID3 {
   	/**
   	 * Populates the class variable matrix with the values as mentioned in the DataRef class. Aim is to make all the attributes numeric which will make data handling easy
   	 */
-  	public static void formMatrix(int [][]matrix){
+  	public static void formMatrix(int [][]matrix,ArrayList<DataSet>data){
   		int i = 0 ;
+  		System.out.println(matrix.length);
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
   			DataSet dataItem = (DataSet) iterator.next();
   			
@@ -182,7 +184,6 @@ public class ID3 {
   				matrix[i][0] = 0;
   			else
   				matrix[i][0] = 1;
-  			
   			
   			if(dataItem.workClass.equals("Private"))
   				matrix[i][1] = 0;
@@ -432,7 +433,7 @@ public class ID3 {
   	}
   	public static double calcAccuracy(int[][] testData,Tree root){
   		double accuracy = 0.0;
-  		int result[] = new int[2];
+  		int result[] = {0,0};
   		for (int i=0;i<testData.length;i++) {
 			 int dataSet[] = testData[i];
 			if(root.traversal(dataSet)==1)
@@ -440,7 +441,9 @@ public class ID3 {
 			else
 				result[0]++;
 		}
-  		accuracy = (double)result[1]/result.length;
+  		accuracy = (double)result[1]/(result[0]+result[1]);
+  		System.out.println("Accuracy of the ID3 is : "+accuracy);
+  		System.out.println("It has correctly classified "+result[1]+" instances out of "+result[0]+result[1]+" instances" );
   		return accuracy;
   	}
   	
@@ -505,7 +508,7 @@ public class ID3 {
   	 * @param data : Data passed as a list of DataSet Objects 
   	 * @param param : parameter for which split is supposed to be calculated 
   	 * @return split : returns the value on which split should happen 
-  	 * Calculates where split should happen in continuous variables based on the gini index
+  	 * Calculates where split should happen in continuous variables based on the entu index
   	 */
   	public static int calcSplit(ArrayList<DataSet> data, String param){
   		Map<Integer, Integer> _cnt = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance <=50K
@@ -585,7 +588,7 @@ public class ID3 {
   			}
   		}
   		return split;
-  	}  	
+  	} 
   	
   	public static int checkPN(int matrix[][]){
   		int result = 0;
