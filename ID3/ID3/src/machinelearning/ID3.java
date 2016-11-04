@@ -65,10 +65,10 @@ public class ID3 {
   				}
   				nextAttEnt.get(targetAttribute).flag = false;
   				int nextAttribute = findA(temp.get(i),nextAttEnt);
-  				for(int k =0;k<14;k++){
+  				/*for(int k =0;k<14;k++){
   					System.out.print(nextAttEnt.get(k).flag+" ");
   				}
-  				System.out.println("");
+  				System.out.println("");*/
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					System.out.println("******"+temp.get(i).length);
