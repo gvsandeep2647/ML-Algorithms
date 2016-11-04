@@ -20,12 +20,11 @@ public class ID3 {
 	public static int testMatrix[][] = new int[15060][15];
 	public static void main(String[] args) {
         try{
-        	inputHandle("adult.txt",data);
+        	inputHandle("noob.txt",data);
         }catch(Exception e){
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
-        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
@@ -40,8 +39,7 @@ public class ID3 {
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
-        root.printTree();
-        
+        //root.printTree();
         try{
         	inputHandle("testing.txt",testData);
         }catch(Exception e){
@@ -50,6 +48,7 @@ public class ID3 {
         
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
+        System.out.println(root.cnt);
   	}
   	
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
@@ -70,7 +69,6 @@ public class ID3 {
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
-  			//System.out.println(temp.get(i).length+" "+targetAttribute+" "+i+" base:"+base);
   			if(base == -1){
   				Tree tempTree = new Tree(targetAttribute,i);
   				tempTree.addChild(14,0);
@@ -168,7 +166,6 @@ public class ID3 {
   		ArrayList<int [][]> matrices = new ArrayList<int [][]>();
   		for(int i = 0;i<dr.attrRef[attribute].length;i++)
 			matrices.add(datamodel[i]);
-  		System.out.println(dr.majorRef[attribute]+" "+matrices.size());
   		return matrices;
   	}
   	/**
@@ -442,8 +439,8 @@ public class ID3 {
 				result[0]++;
 		}
   		accuracy = (double)result[1]/(result[0]+result[1]);
-  		System.out.println("Accuracy of the ID3 is : "+accuracy);
-  		System.out.println("It has correctly classified "+result[1]+" instances out of "+result[0]+result[1]+" instances" );
+  		System.out.println("Accuracy of the ID3 is : " + accuracy);
+  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
   		return accuracy;
   	}
   	

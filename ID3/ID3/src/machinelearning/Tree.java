@@ -1,5 +1,4 @@
 package machinelearning;
-import java.time.temporal.Temporal;
 import java.util.*;
 
 /**
@@ -12,6 +11,7 @@ public class Tree {
 	int intAttr;
 	int intVal;
 	ArrayList<Tree> children;
+	int cnt;
 	
 	Tree(int attribute, int value){
 		DataRef temp = new DataRef();
@@ -61,20 +61,26 @@ public class Tree {
 	
 	public int traversal(int[] data){
 		int value = 0;
-		System.out.println("hi");
 		int currAttr = this.intAttr;
 		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
+		try{
 		while(true){
-			System.out.println(tempNode.attribute +" " +tempNode.value);
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
+				if(data[currAttr]==0){
+					this.cnt++;
+					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
+				}
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
+				
 				break;
 			}else{
 				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
 			}
 		}
-		System.out.println("result: "+value);
+		}catch(Exception e){
+			
+		}
 		return value;
 	}
 	/**
@@ -89,7 +95,6 @@ public class Tree {
 			temp = q.poll();
 			for(int i=0;i<temp.children.size();i++){
 				q.add(temp.children.get(i));
-				if(temp.attribute.equals("sex")&&temp.value.equals("Male"))
 				System.out.println("Parent:"+temp.attribute+"-"+temp.value+" "+" Child:"+temp.children.get(i).attribute+"-"+temp.children.get(i).value+" ");
 			}
 		}

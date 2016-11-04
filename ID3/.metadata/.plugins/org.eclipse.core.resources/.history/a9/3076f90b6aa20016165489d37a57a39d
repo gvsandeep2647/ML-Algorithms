@@ -1,0 +1,9 @@
+package machinelearning;
+
+import java.util.ArrayList;
+
+public class Tester {
+	public static ArrayList<DataSet> testData = new ArrayList<DataSet>();
+	
+	
+}
