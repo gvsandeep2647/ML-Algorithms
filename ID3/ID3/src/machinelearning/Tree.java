@@ -64,17 +64,20 @@ public class Tree {
 		System.out.println("hi");
 		int currAttr = this.intAttr;
 		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
+		try{
 		while(true){
-			System.out.println(tempNode.attribute +" " +tempNode.value);
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
+				//System.out.println("result "+tempNode.children.get(0).intVal+" "+data[currAttr]);
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
 				break;
 			}else{
 				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
 			}
 		}
-		System.out.println("result: "+value);
+		}catch(Exception e){
+			System.out.println("Exception");
+		}
 		return value;
 	}
 	/**
