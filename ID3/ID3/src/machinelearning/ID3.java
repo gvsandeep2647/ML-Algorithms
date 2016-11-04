@@ -52,6 +52,19 @@ public class ID3 {
   	
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
+  		int positive=0,negative=0;
+  		AttributeEntropy tempAtt = attEnt.get(targetAttribute);
+  		for(int i = 0;i<tempAtt.diversity.size();i++)
+  		{	
+  			try{
+  			positive += tempAtt.diversity.get(i)[1];
+  			negative += tempAtt.diversity.get(i)[0];
+  			}catch(Exception e){
+  				;
+  			}
+  			
+  		}
+  		System.out.println("***********"+tempAtt.attribute+" "+positive+" "+negative);
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
@@ -75,10 +88,10 @@ public class ID3 {
   				}
   				nextAttEnt.get(targetAttribute).flag = false;
   				int nextAttribute = findA(temp.get(i),nextAttEnt);
-  				for(int k =0;k<14;k++){
+  				/*for(int k =0;k<14;k++){
   					System.out.print(nextAttEnt.get(k).flag+" ");
   				}
-  				System.out.println("");
+  				System.out.println("");*/
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					System.out.println("******"+temp.get(i).length);
@@ -87,6 +100,12 @@ public class ID3 {
 	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
 	  				root.add(tempTree);
   				}
+  			}
+  			else if(base==2){
+  				Tree tempTree = new Tree(targetAttribute,i);
+  				int baseVal = (negative>=positive)?0:1;
+  				tempTree.addChild(14,baseVal);
+  				root.add(tempTree);
   			}
   		}
   		return root;
@@ -99,10 +118,8 @@ public class ID3 {
   	 */
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
   		for(int i=0;i<14;i++){
-  			if(attEnt.get(i).flag){
   				attEnt.get(i).updateFields(matrix);
   				attEnt.get(i).calcEntropy();
-  			}
   		}
   		int A=-1;
   		double min = 5.0;
@@ -573,7 +590,7 @@ public class ID3 {
   	public static int checkPN(int matrix[][]){
   		int result = 0;
   		if(matrix.length == 0){
-  			return -1;
+  			return 2;
   		}
   		for(int i=0;i<matrix.length;i++){
   			result = result + matrix[i][14];
@@ -584,6 +601,7 @@ public class ID3 {
   		else if(result == matrix.length){
   			return 1;
   		}
+  		
   		else
   			return 0;
   	}
