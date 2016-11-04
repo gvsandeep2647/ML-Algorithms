@@ -8,11 +8,15 @@ import java.util.*;
 public class Tree {
 	String attribute;
 	String value;
+	int intAttr;
+	int intVal;
 	ArrayList<Tree> children;
 	
 	Tree(int attribute, int value){
 		DataRef temp = new DataRef();
 		this.attribute = temp.majorRef[attribute];
+		this.intAttr = attribute;
+		this.intVal = value;
 		if(value == -1)
 			this.value = "";
 		else
@@ -54,6 +58,15 @@ public class Tree {
 		}
 	}
 	
+	public int traversal(int[] data){
+		int value = 0;
+		int currAttr = this.intAttr;
+		Tree tempNode = searchChild(currAttr,data[currAttr]);
+		while(currAttr!=14){
+			
+		}
+		return value;
+	}
 	/**
 	 * An Utility function to print the tree in a rather unconventional way for better understanding
 	 */
