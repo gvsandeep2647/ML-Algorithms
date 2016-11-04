@@ -46,14 +46,12 @@ public class Tree {
 			return null;
 		}
 		else{
-			DataRef temp = new DataRef();
-			String attr = temp.majorRef[attribute];
-			String val = temp.attrRef[attribute][value];
-			for(int i=0;i<this.children.size();i++){
-				if(attr.equals(this.children.get(i).attribute)&&val.equals(this.children.get(i).value)){
+			int i = 0;
+			for(i=0;i<this.children.size();i++){
+					if(attribute == this.children.get(i).intAttr && value == this.children.get(i).intVal){
 					node  = this.children.get(i);
 					return node;
-				}
+					}
 			}
 			return null;
 		}
@@ -68,7 +66,6 @@ public class Tree {
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
 				if(data[currAttr]==0){
-					this.cnt++;
 					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
 				}
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
@@ -79,7 +76,8 @@ public class Tree {
 			}
 		}
 		}catch(Exception e){
-			System.out.println("Exception");
+			this.cnt++;
+			//System.out.println(e);
 		}
 		return value;
 	}

@@ -20,9 +20,9 @@ public class ID3 {
 	public static int testMatrix[][] = new int[15060][15];
 	public static void main(String[] args) {
         try{
-        	inputHandle("noob.txt",data);
+        	inputHandle("adult.txt",data);
         }catch(Exception e){
-        	System.out.println(e);
+        	System.out.println("train "+e);
         }
         ageSplit = calcSplit(data,"age");
         fnlSplit = calcSplit(data,"fnlwgt");
@@ -41,9 +41,9 @@ public class ID3 {
         root.children = runID3(matrix,firstAttribute,attEnt);
         //root.printTree();
         try{
-        	inputHandle("testing.txt",testData);
+        	inputHandle("formattedTesting.txt",testData);
         }catch(Exception e){
-        	System.out.println(e);
+        	System.out.println("Test "+e);
         }
         
         formMatrix(testMatrix,testData);
@@ -94,6 +94,9 @@ public class ID3 {
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					//System.out.println("******"+temp.get(i).length);
+  					tempTree = new Tree(targetAttribute,i);
+  	  				tempTree.addChild(14,0);
+  	  				root.add(tempTree);
   				}
   				else{
 	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
@@ -454,7 +457,7 @@ public class ID3 {
          int flag = 1;
          while( (line=br.readLine()) != null) {
         	flag = 1;
-			StringTokenizer st = new StringTokenizer(line,", ");
+			StringTokenizer st = new StringTokenizer(line,",");
 			int age=0;
 			String workClass=null;
 			int fnlwgt=0;
@@ -471,27 +474,27 @@ public class ID3 {
 			String nativeCountry=null;
 			String income = null;
              while(st.hasMoreTokens()){
-            	 age = Integer.parseInt(st.nextToken());
-            	 workClass = st.nextToken();
+            	 age = Integer.parseInt((st.nextToken()).trim());
+            	 workClass = st.nextToken().trim();
             	 if(workClass.equals("?"))
             		 flag = 0;
-            	 fnlwgt = Integer.parseInt(st.nextToken());
-            	 education = st.nextToken();
-            	 educationNum = Integer.parseInt(st.nextToken());
-            	 maritalStatus = st.nextToken();
-            	 occupation = st.nextToken();
+            	 fnlwgt = Integer.parseInt(st.nextToken().trim());
+            	 education = st.nextToken().trim();
+            	 educationNum = Integer.parseInt(st.nextToken().trim());
+            	 maritalStatus = st.nextToken().trim();
+            	 occupation = st.nextToken().trim();
             	 if(occupation.equals("?"))
             		 flag = 0;
-            	 relationship = st.nextToken();
-            	 race = st.nextToken();
-            	 sex = st.nextToken();
-            	 capitalGain = Integer.parseInt(st.nextToken());
-            	 capitalLoss = Integer.parseInt(st.nextToken());
-            	 hoursPerWeek = Integer.parseInt(st.nextToken());
-            	 nativeCountry = st.nextToken();
+            	 relationship = st.nextToken().trim();
+            	 race = st.nextToken().trim();
+            	 sex = st.nextToken().trim();
+            	 capitalGain = Integer.parseInt(st.nextToken().trim());
+            	 capitalLoss = Integer.parseInt(st.nextToken().trim());
+            	 hoursPerWeek = Integer.parseInt(st.nextToken().trim());
+            	 nativeCountry = st.nextToken().trim();
             	 if(nativeCountry.equals("?"))
             		 flag = 0;
-            	 income = st.nextToken();
+            	 income = st.nextToken().trim();
             	 
              }
              if(flag==1)
