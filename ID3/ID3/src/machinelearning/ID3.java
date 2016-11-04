@@ -15,7 +15,7 @@ public class ID3 {
 	static int capitalLossSplit;
 	static int hoursPerWeekSplit;
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
-	public static int matrix[][] = new int[30162][15];
+	public static int matrix[][] = new int[19][15];
   	public static void main(String[] args) {
         try{
         	inputHandle();
@@ -23,6 +23,7 @@ public class ID3 {
         	System.out.println(e);
         }
         ageSplit = calcSplit(data,"age");
+        System.out.println(ageSplit);
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
         capitalGainSplit = calcSplit(data,"capitalGain");
@@ -43,9 +44,10 @@ public class ID3 {
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
-  		attEnt.get(targetAttribute).flag = false;
+  		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
+  			System.out.println(temp.get(i).length+" "+targetAttribute+" "+i+" base:"+base);
   			if(base == -1){
   				Tree tempTree = new Tree(targetAttribute,i);
   				tempTree.addChild(14,0);
@@ -56,14 +58,24 @@ public class ID3 {
   				tempTree.addChild(14,1);
   				root.add(tempTree);
   			}
-  			else{
-  				int nextAttribute = findA(temp.get(i),attEnt);
+  			else if(base == 0){
+  				for(int j=0;j<14;j++){
+  					AttributeEntropy a = new AttributeEntropy(attEnt.get(j).attribute);
+  					a.flag = attEnt.get(j).flag;
+  					nextAttEnt.add(a);
+  				}
+  				nextAttEnt.get(targetAttribute).flag = false;
+  				int nextAttribute = findA(temp.get(i),nextAttEnt);
+  				for(int k =0;k<14;k++){
+  					System.out.print(nextAttEnt.get(k).flag+" ");
+  				}
+  				System.out.println("");
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					System.out.println("******"+temp.get(i).length);
   				}
   				else{
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,attEnt);
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
 	  				root.add(tempTree);
   				}
   			}
@@ -398,7 +410,7 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle()throws IOException {
-  		 BufferedReader br = new BufferedReader(new FileReader("adult.txt"));
+  		 BufferedReader br = new BufferedReader(new FileReader("test.txt"));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
@@ -538,6 +550,9 @@ public class ID3 {
   	
   	public static int checkPN(int matrix[][]){
   		int result = 0;
+  		if(matrix.length == 0){
+  			return 2;
+  		}
   		for(int i=0;i<matrix.length;i++){
   			result = result + matrix[i][14];
   		}
