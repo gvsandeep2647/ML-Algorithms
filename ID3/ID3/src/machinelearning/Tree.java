@@ -79,7 +79,7 @@ public class Tree {
 			}
 		}
 		}catch(Exception e){
-			
+			System.out.println("Exception");
 		}
 		return value;
 	}
