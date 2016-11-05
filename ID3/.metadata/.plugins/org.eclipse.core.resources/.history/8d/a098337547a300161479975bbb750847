@@ -52,7 +52,7 @@ public class ID3 {
         * 200 trees of 4 attributes each.
         * */
         RandomForrest rf = new RandomForrest();
-        for(int i=0;i<2000;i++)
+        for(int i=0;i<100;i++)
         {
         	attEnt = new ArrayList<AttributeEntropy>();
         	for(int k = 0;k<14;k++){
