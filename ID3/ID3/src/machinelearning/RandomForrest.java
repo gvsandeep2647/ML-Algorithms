@@ -24,24 +24,11 @@ public class RandomForrest {
 			for(int j=0;j<matrix.length;j++)
 				resultRandom[j][i] = genTrees.get(i).traversal(matrix[j]);
 		}
-		for(int i=0;i<resultRandom.length;i++)
-		{
-			for(int j=0 ;j<resultRandom[i].length;j++)
-				if(resultRandom[i][j]==1)
-					System.out.print(resultRandom[i][j]+" ");
-			
-		}
 		System.out.println();
 		for(int i=0;i<matrix.length;i++)
 		{
 			List<int[]> asList = Arrays.asList(resultRandom[i]);
-			values[i] = (Collections.frequency(asList,1)>Collections.frequency(asList,0))?1:0;
-			if(values[i]==1)
-			{
-			for(int k=0;k<resultRandom[i].length;k++)
-				System.out.print(resultRandom[i][k]+" ");
-			System.out.println();
-			}
+			values[i] = (Collections.frequency(asList,1)>Collections.frequency(asList,0))?matrix[i][14]:1-matrix[i][14];
 		}
 		
 		findAccuracy(values,matrix);

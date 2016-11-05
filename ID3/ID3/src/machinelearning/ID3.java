@@ -30,7 +30,6 @@ public class ID3 {
         capitalGainSplit = calcSplit(data,"capitalGain");
         capitalLossSplit = calcSplit(data,"capitalLoss");
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
-        System.out.println(eduNumSplit);
         formMatrix(matrix,data);
         ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
         for(int i = 0;i<14;i++){
@@ -69,6 +68,7 @@ public class ID3 {
         	 firstAttribute = findA(matrix,attEnt);
              root = new Tree(firstAttribute,-1);
              root.children = runID3(matrix,firstAttribute,attEnt);
+             rf.genTrees.add(root);
         }
         rf.populateMatrix(testMatrix);
   	}
@@ -85,7 +85,6 @@ public class ID3 {
   			}catch(Exception e){
   				;
   			}
-  			
   		}
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
@@ -109,10 +108,6 @@ public class ID3 {
   				}
   				nextAttEnt.get(targetAttribute).flag = false;
   				int nextAttribute = findA(temp.get(i),nextAttEnt);
-  				/*for(int k =0;k<14;k++){
-  					System.out.print(nextAttEnt.get(k).flag+" ");
-  				}
-  				System.out.println("");*/
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					tempTree = new Tree(targetAttribute,i);
@@ -205,7 +200,6 @@ public class ID3 {
   	 */
   	public static void formMatrix(int [][]matrix,ArrayList<DataSet>data){
   		int i = 0 ;
-  		System.out.println(matrix.length);
   		for (Iterator<DataSet> iterator = data.iterator(); iterator.hasNext();) {
   			DataSet dataItem = (DataSet) iterator.next();
   			
@@ -481,12 +475,10 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {
-  		int cnt = 0;
   		 BufferedReader br = new BufferedReader(new FileReader(filename));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
-       		cnt++;
         	flag = 1;
 			StringTokenizer st = new StringTokenizer(line,",");
 			int age=0;
