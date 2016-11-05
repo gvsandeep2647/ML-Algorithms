@@ -3,8 +3,7 @@ package machinelearning;
 import java.util.*;
 
 public class RandomForrest {
-	int resultRandom[][] = new int[15060][200];
-
+	int resultRandom[][] = new int[15060][1];
 	ArrayList<Tree> genTrees = new ArrayList<Tree>();
 	public int[] generateRandomAttr(){
 		int attr[] = new int[10];
@@ -36,7 +35,7 @@ public class RandomForrest {
 				else
 					negative++;
 			}
-			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
+			values[i] = (posiitive>negative)?matrix[i][14]:1-matrix[i][14];
 		}
 		
 		findAccuracy(values,matrix);

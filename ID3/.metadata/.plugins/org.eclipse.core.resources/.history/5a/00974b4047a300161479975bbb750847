@@ -35,7 +35,6 @@ public class ID3 {
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
         }
-        
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
@@ -48,7 +47,6 @@ public class ID3 {
         
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
-
        /**
         * Random Forest Implementation Begins here.
         * 200 trees of 4 attributes each.
@@ -60,6 +58,7 @@ public class ID3 {
         	for(int k = 0;k<14;k++){
             	attEnt.add(new AttributeEntropy(k));
             }
+        	
         	int attrToConsider[] = rf.generateRandomAttr();
         	for(int j=0;j<attrToConsider.length;j++)
         	{

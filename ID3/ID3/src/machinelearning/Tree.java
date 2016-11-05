@@ -3,7 +3,8 @@ import java.util.*;
 
 /**
  *  A Node of the tree 
- *	Contains : Attribute , value and the list of children
+ *	Contains : Attribute (String and Integer counterparts) , value (String and Integer counterparts)
+ *  and the list of children
  */
 public class Tree {
 	String attribute;
@@ -57,6 +58,11 @@ public class Tree {
 		}
 	}
 	
+	/**
+	 * @param data The instance whose result the tree is supposed to predict
+	 * @return 0 if the tree mis-classifies data and 1 if the classification is correct
+	 * Traverses the tree from root to the leaf based on values of attributes in data and decides if tree has misclassified the data or not
+	 */
 	public int traversal(int[] data){
 		int value = 0;
 		int currAttr = this.intAttr;
@@ -83,6 +89,7 @@ public class Tree {
 	/**
 	 * An Utility function to print the tree in a rather unconventional way for better understanding
 	 */
+	
 	public void printTree(){
 		Queue<Tree> q = new LinkedList<Tree>();
 		q.add(this);
