@@ -91,7 +91,6 @@ public class Tree {
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
 				value = tempNode.children.get(0).intVal;
-				
 				break;
 			}else{
 				tempNode = tempNode.searchChild(currAttr,data[currAttr]);

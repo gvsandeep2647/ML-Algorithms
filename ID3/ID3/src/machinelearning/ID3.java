@@ -112,9 +112,16 @@ public class ID3 {
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					tempTree = new Tree(targetAttribute,i);
-  	  				int baseVal = (negative>=positive)?0:1;
-  	  				tempTree.addChild(14,baseVal);
-  	  				root.add(tempTree);
+                    int pos = 0, neg = 0;
+                      for(int z = 0;z<temp.get(i).length;z++){
+                          if(temp.get(i)[z][14] == 0)
+                              neg++;
+                          else
+                              pos++;
+                      }
+                      int baseVal = (neg>pos)?0:1;
+                      tempTree.addChild(14,baseVal);
+                      root.add(tempTree);
   				}
   				else{
 	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
