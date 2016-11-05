@@ -17,7 +17,7 @@ public class ID3 {
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
 	public static ArrayList<DataSet> testData = new ArrayList<DataSet>();
 	public static int matrix[][] = new int[30162][15];
-	public static int testMatrix[][] = new int[14895][15];
+	public static int testMatrix[][] = new int[15060][15];
 	public static void main(String[] args) {
         try{
         	inputHandle("adult.txt",data);
@@ -30,6 +30,7 @@ public class ID3 {
         capitalGainSplit = calcSplit(data,"capitalGain");
         capitalLossSplit = calcSplit(data,"capitalLoss");
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
+        System.out.println(eduNumSplit);
         formMatrix(matrix,data);
         ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
         for(int i = 0;i<14;i++){
@@ -39,34 +40,37 @@ public class ID3 {
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
         
-        
         try{
-        	inputHandle("formattedTesting.txt",testData);
+        	inputHandle("newtesting1.txt",testData);
         }catch(Exception e){
         	System.out.println("Test "+e);
         }
         
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
-        
-        for(int i = 0;i<14;i++){
-        	attEnt.add(new AttributeEntropy(i));
-        }
+       /**
+        * Random Forest Implementation Begins here.
+        * 200 trees of 4 attributes each.
+        * */
         RandomForrest rf = new RandomForrest();
-        for(int i=0;i<200;i++)
+        for(int i=0;i<1;i++)
         {
+        	attEnt = new ArrayList<AttributeEntropy>();
+        	for(int k = 0;k<14;k++){
+            	attEnt.add(new AttributeEntropy(k));
+            }
+        	
         	int attrToConsider[] = rf.generateRandomAttr();
         	for(int j=0;j<attrToConsider.length;j++)
         	{
-        		attEnt.get(j).flag = false;
+        		attEnt.get(attrToConsider[j]).flag = false;
         	}
+        	
         	 firstAttribute = findA(matrix,attEnt);
              root = new Tree(firstAttribute,-1);
              root.children = runID3(matrix,firstAttribute,attEnt);
-             rf.genTrees.add(root);
         }
         rf.populateMatrix(testMatrix);
-        
   	}
   	
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
@@ -112,7 +116,7 @@ public class ID3 {
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					tempTree = new Tree(targetAttribute,i);
-  	  				int baseVal = (negative>=positive)?0:1;
+  	  				int baseVal =0;
   	  				tempTree.addChild(14,baseVal);
   	  				root.add(tempTree);
   				}
@@ -145,7 +149,7 @@ public class ID3 {
   		double min = 5.0;
   		for(int i=0;i<14;i++){
   			if(attEnt.get(i).flag){
-  				if(attEnt.get(i).entropy<min){
+  				if(attEnt.get(i).entropy<=min){
   					min = attEnt.get(i).entropy;
   					A = attEnt.get(i).attribute;
   				}
@@ -470,10 +474,12 @@ public class ID3 {
   	 * Reads the data from the text file and stores it in the object.
   	 */
   	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {
+  		int cnt = 0;
   		 BufferedReader br = new BufferedReader(new FileReader(filename));
          String line=null;
          int flag = 1;
          while( (line=br.readLine()) != null) {
+       		cnt++;
         	flag = 1;
 			StringTokenizer st = new StringTokenizer(line,",");
 			int age=0;
@@ -513,11 +519,11 @@ public class ID3 {
             	 if(nativeCountry.equals("?"))
             		 flag = 0;
             	 income = st.nextToken().trim();
-            	 
              }
              if(flag==1)
             	 data.add(new DataSet(age,workClass,fnlwgt,education,educationNum,maritalStatus,occupation,relationship,race,sex,capitalGain,capitalLoss,hoursPerWeek,nativeCountry,income));
          }       
+         
          br.close();
   	}
   	
