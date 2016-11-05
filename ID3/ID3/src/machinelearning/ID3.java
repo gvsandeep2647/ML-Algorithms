@@ -35,6 +35,7 @@ public class ID3 {
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
         }
+        
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
@@ -48,17 +49,18 @@ public class ID3 {
         
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
-        
-        for(int i = 0;i<14;i++){
-        	attEnt.add(new AttributeEntropy(i));
-        }
+      
         RandomForrest rf = new RandomForrest();
         for(int i=0;i<200;i++)
         {
+        	attEnt = new ArrayList<AttributeEntropy>();
+        	for(int k = 0;k<14;k++){
+            	attEnt.add(new AttributeEntropy(k));
+            }
         	int attrToConsider[] = rf.generateRandomAttr();
         	for(int j=0;j<attrToConsider.length;j++)
         	{
-        		attEnt.get(j).flag = false;
+        		attEnt.get(attrToConsider[j]).flag = false;
         	}
         	 firstAttribute = findA(matrix,attEnt);
              root = new Tree(firstAttribute,-1);
