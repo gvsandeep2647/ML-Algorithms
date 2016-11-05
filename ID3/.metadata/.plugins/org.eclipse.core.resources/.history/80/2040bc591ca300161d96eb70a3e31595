@@ -66,7 +66,10 @@ public class Tree {
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
 				if(data[currAttr]==0){
-
+<<<<<<< HEAD
+					
+=======
+>>>>>>> 177cbce75d60785dfe6ee20875e2acfc32738f50
 					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
 				}
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
