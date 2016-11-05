@@ -3,6 +3,7 @@ package machinelearning;
 import java.util.*;
 
 public class RandomForrest {
+
 	int resultRandom[][] = new int[15060][200];
 	ArrayList<Tree> genTrees = new ArrayList<Tree>();
 	public int[] generateRandomAttr(){
@@ -18,19 +19,19 @@ public class RandomForrest {
         return attr;
 	}
 	public int[] populateMatrix(int matrix[][]){
-		int values[] = new int[14895];
+		int values[] = new int[matrix.length];
 		for(int i=0;i<genTrees.size();i++)
 		{
 			for(int j=0;j<matrix.length;j++)
-				resultRandom[j][i] = genTrees.get(i).traversalRandom(matrix[j]);
+				resultRandom[j][i] = genTrees.get(i).traversal(matrix[j]);
+		}
+		System.out.println();
+		for(int i=0;i<matrix.length;i++)
+		{
+			List<int[]> asList = Arrays.asList(resultRandom[i]);
+			values[i] = (Collections.frequency(asList,1)>Collections.frequency(asList,0))?matrix[i][14]:1-matrix[i][14];
 		}
 		
-		for(int i=0;i<14895;i++)
-		{
-			List asList = Arrays.asList(resultRandom[i]);
-			Set<Integer> mySet = new HashSet<Integer>(asList);
-			values[i] = (Collections.frequency(asList,1)>Collections.frequency(asList,0))?1:0;
-		}
 		findAccuracy(values,matrix);
 		return values;
 	}

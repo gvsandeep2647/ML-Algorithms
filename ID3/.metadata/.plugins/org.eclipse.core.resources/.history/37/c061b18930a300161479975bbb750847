@@ -1,0 +1,20 @@
+package machinelearning;
+
+import java.util.*;
+
+public class RandomForrest {
+	int resultRandom[][] = new int[14895][200];
+	ArrayList<Tree> genTrees = new ArrayList<Tree>();
+	public int[] generateRandomAttr(){
+		int attr[] = new int[10];
+		ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0; i<14; i++) {
+            list.add(new Integer(i));
+        }
+        Collections.shuffle(list);
+        for (int i=0;i<10; i++) {
+            attr[i] = list.get(i);
+        }
+        return attr;
+	}
+}

@@ -65,10 +65,8 @@ public class Tree {
 		while(true){
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
-				if(data[currAttr]==0){
+				if(data[currAttr]==0)
 					this.cnt++;
-					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
-				}
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
 				
 				break;
@@ -77,31 +75,11 @@ public class Tree {
 			}
 		}
 		}catch(Exception e){
-			
 			//System.out.println(e);
 		}
 		return value;
 	}
-	public int traversalRandom(int[] data){
-		int value = 0;
-		int currAttr = this.intAttr;
-		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
-		try{
-		while(true){
-			currAttr = tempNode.children.get(0).intAttr;
-			if(currAttr==14){
-				value = tempNode.children.get(0).intVal;
-				break;
-			}else{
-				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
-			}
-		}
-		}catch(Exception e){
-			this.cnt++;
-			//System.out.println(e);
-		}
-		return value;
-	}
+
 	/**
 	 * An Utility function to print the tree in a rather unconventional way for better understanding
 	 */

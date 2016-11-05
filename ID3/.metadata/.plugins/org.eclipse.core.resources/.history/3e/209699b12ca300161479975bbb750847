@@ -1,0 +1,8 @@
+package machinelearning;
+
+public class RandomForrest {
+	public int[] generateRandomAttr(){
+		int randAtt = new int[4];
+		return randAtt;
+	}
+}
