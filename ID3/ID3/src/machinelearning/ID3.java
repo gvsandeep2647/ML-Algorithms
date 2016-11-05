@@ -17,7 +17,7 @@ public class ID3 {
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
 	public static ArrayList<DataSet> testData = new ArrayList<DataSet>();
 	public static int matrix[][] = new int[30162][15];
-	public static int testMatrix[][] = new int[15060][15];
+	public static int testMatrix[][] = new int[14895][15];
 	public static void main(String[] args) {
         try{
         	inputHandle("noob.txt",data);
@@ -41,7 +41,7 @@ public class ID3 {
         root.children = runID3(matrix,firstAttribute,attEnt);
         //root.printTree();
         try{
-        	inputHandle("testing.txt",testData);
+        	inputHandle("formattedTesting.txt",testData);
         }catch(Exception e){
         	System.out.println(e);
         }

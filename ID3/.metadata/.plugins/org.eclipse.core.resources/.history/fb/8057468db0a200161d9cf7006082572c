@@ -8,11 +8,16 @@ import java.util.*;
 public class Tree {
 	String attribute;
 	String value;
+	int intAttr;
+	int intVal;
 	ArrayList<Tree> children;
+	int cnt;
 	
 	Tree(int attribute, int value){
 		DataRef temp = new DataRef();
 		this.attribute = temp.majorRef[attribute];
+		this.intAttr = attribute;
+		this.intVal = value;
 		if(value == -1)
 			this.value = "";
 		else
@@ -54,10 +59,28 @@ public class Tree {
 		}
 	}
 	
-	public int traversal(DataSet data){
+	public int traversal(int[] data){
 		int value = 0;
-		
-		while()
+		int currAttr = this.intAttr;
+		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
+		try{
+		while(true){
+			currAttr = tempNode.children.get(0).intAttr;
+			if(currAttr==14){
+				if(data[currAttr]==0){
+					this.cnt++;
+					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
+				}
+				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
+				
+				break;
+			}else{
+				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
+			}
+		}
+		}catch(Exception e){
+			System.out.println("Exception");
+		}
 		return value;
 	}
 	/**
