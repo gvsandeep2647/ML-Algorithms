@@ -39,7 +39,8 @@ public class ID3 {
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
-        //root.printTree();
+        
+        
         try{
         	inputHandle("formattedTesting.txt",testData);
         }catch(Exception e){
@@ -48,7 +49,25 @@ public class ID3 {
         
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
-        System.out.println(root.cnt);
+        
+        for(int i = 0;i<14;i++){
+        	attEnt.add(new AttributeEntropy(i));
+        }
+        RandomForrest rf = new RandomForrest();
+        for(int i=0;i<200;i++)
+        {
+        	int attrToConsider[] = rf.generateRandomAttr();
+        	for(int j=0;j<attrToConsider.length;j++)
+        	{
+        		attEnt.get(j).flag = false;
+        	}
+        	 firstAttribute = findA(matrix,attEnt);
+             root = new Tree(firstAttribute,-1);
+             root.children = runID3(matrix,firstAttribute,attEnt);
+             rf.genTrees.add(root);
+        }
+        rf.populateMatrix(testMatrix);
+        
   	}
   	
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
@@ -431,7 +450,7 @@ public class ID3 {
   			i++;
   		}
   	}
-  	public static double calcAccuracy(int[][] testData,Tree root){
+  	public static void calcAccuracy(int[][] testData,Tree root){
   		double accuracy = 0.0;
   		int result[] = {0,0};
   		for (int i=0;i<testData.length;i++) {
@@ -441,10 +460,10 @@ public class ID3 {
 			else
 				result[0]++;
 		}
-  		accuracy = (double)result[1]/(result[0]+result[1]);
-  		System.out.println("Accuracy of the ID3 is : " + accuracy);
+  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
+  		accuracy = Math.round(accuracy*100) / 100.0;
+  		System.out.println("Accuracy of the ID3 is : " + accuracy+"%");
   		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
-  		return accuracy;
   	}
   	
   	/**
@@ -609,4 +628,3 @@ public class ID3 {
   			return 0;
   	}
 }
-
