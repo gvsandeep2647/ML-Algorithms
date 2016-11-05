@@ -66,6 +66,7 @@ public class Tree {
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
 				if(data[currAttr]==0){
+					this.cnt++;
 					//System.out.println("result :"+tempNode.children.get(0).intVal+" "+data[currAttr] );
 				}
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
@@ -76,7 +77,7 @@ public class Tree {
 			}
 		}
 		}catch(Exception e){
-			this.cnt++;
+			
 			//System.out.println(e);
 		}
 		return value;

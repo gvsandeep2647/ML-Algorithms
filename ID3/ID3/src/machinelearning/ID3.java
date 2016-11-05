@@ -30,7 +30,6 @@ public class ID3 {
         capitalGainSplit = calcSplit(data,"capitalGain");
         capitalLossSplit = calcSplit(data,"capitalLoss");
         hoursPerWeekSplit = calcSplit(data,"hoursPerWeek");
-        
         formMatrix(matrix,data);
         ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
         for(int i = 0;i<14;i++){
@@ -93,9 +92,9 @@ public class ID3 {
   				System.out.println("");*/
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
-  					//System.out.println("******"+temp.get(i).length);
   					tempTree = new Tree(targetAttribute,i);
-  	  				tempTree.addChild(14,0);
+  	  				int baseVal = (negative>=positive)?0:1;
+  	  				tempTree.addChild(14,baseVal);
   	  				root.add(tempTree);
   				}
   				else{
@@ -563,8 +562,8 @@ public class ID3 {
   			cnt_.put(list.get(i),cnt_.get(list.get(i))+cnt_.get(list.get(i-1)));
   		}
   		//count matrix - count[0][i] and count[0][i+i] has the split value 
-  		//count matrix - count[1][i] has no of instances <= split value and result = <=50K; count[1][i+1] has no of instances <=split value and result = >50K
-  		//count matrix - count[2][i] has no of instances > split value and result = <=50K; count[2][i+1] has no of instances > split value and result = > 50K
+  		//count matrix - count[1][i] has no of instances <=50K and <=Split Value; count[1][i+1] has no of instances >Split Value and result <=50K
+  		//count matrix - count[2][i] has no of instances >50K and <=Split Value; count[2][i+1] has no of instances >split value and result = >50K
   		int count[][] = new int[3][(list.size()-1)*2];
   		
   		for(int i=0;i<list.size()-1;i++){
@@ -579,11 +578,21 @@ public class ID3 {
   		for(int i=0;i<(list.size()-1)*2;i+=2){
   			double total1 = count[1][i] + count[2][i];
   			double total2 = count[1][i+1] + count[2][i+1];
-  			double gini1 = 1 - Math.pow(count[1][i]/total1,2) - Math.pow(count[2][i]/total1,2);
-  			double gini2 = 1 - Math.pow(count[1][i+1]/total2, 2) - Math.pow(count[2][i+1]/total2,2);
-  			double gini = (total1/N)*gini1 + (total2/N)*gini2;
-  			if(gini<minGini){
-  				minGini = gini;
+  			//double gini1 = 1 - Math.pow(count[1][i]/total1,2) - Math.pow(count[2][i]/total1,2);
+  			//double gini2 = 1 - Math.pow(count[1][i+1]/total2, 2) - Math.pow(count[2][i+1]/total2,2);
+  			double ent1,ent2;
+  			if(count[1][i] == 0 || count[2][i]==0)
+  				ent1 = 0.0;
+  			else
+  				ent1 = (-1)*(count[1][i]/total1)*Math.log(count[1][i]/total1)/Math.log(2) - (count[2][i]/total1)*Math.log(count[2][i]/total1)/Math.log(2);
+  			if(count[1][i+1] ==0 || count[2][i+1] == 0)
+  				ent2 = 0.0;
+  			else
+  				ent2 = (-1)*(count[1][i+1]/total2)*Math.log(count[1][i+1]/total2)/Math.log(2) - (count[2][i+1]/total2)*Math.log(count[2][i+1]/total2)/Math.log(2);
+  			
+  			double ent = (total1/N)*ent1 + (total2/N)*ent2;  
+  			if(ent<minGini){
+  				minGini = ent;
   				split = count[0][i];
   			}
   		}
