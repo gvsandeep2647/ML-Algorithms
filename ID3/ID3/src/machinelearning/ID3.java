@@ -52,13 +52,14 @@ public class ID3 {
         
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
-        root.children = runID3(matrix,firstAttribute,attEnt);
+        root.children = runID3(matrix,firstAttribute,attEnt,false);
         /*Building ID3 ends*/
         
         long LearningstopTime = System.currentTimeMillis();
         long elapsedTime = LearningstopTime - LearningstartTime;
         System.out.println("Time taken for learning and building the ID3: " + (double)elapsedTime/1000 + " seconds");
         
+        /* On Testing Data */
         try{
         	inputHandle("newtesting1.txt",testData);
         }catch(Exception e){
@@ -82,24 +83,33 @@ public class ID3 {
         
         
         RandomForrest rf = new RandomForrest();
+
         for(int i=0;i<200;i++)
         {
         	attEnt = new ArrayList<AttributeEntropy>();
         	for(int k = 0;k<14;k++){
             	attEnt.add(new AttributeEntropy(k));
             }
-        	int attrToConsider[] = rf.generateRandomAttr();
+        	int attrToConsider[] = rf.generateRandomAttr(14,10);
+        	
         	for(int j=0;j<attrToConsider.length;j++)
-        	{
         		attEnt.get(attrToConsider[j]).flag = false;
-        	}
         	
         	 firstAttribute = findA(matrix,attEnt);
              root = new Tree(firstAttribute,-1);
-             root.children = runID3(matrix,firstAttribute,attEnt);
-             rf.genTrees.add(root);
+             int tempArr[] = rf.generateRandomAttr(30162,20108);
+             int tempMatrix[][] = new int[tempArr.length][15];
+            
+             for(int k = 0; k<tempMatrix.length;k++)
+             {
+        		 tempMatrix[k] = matrix[tempArr[k]];
+             }
+             
+             root.children = runID3(tempMatrix,firstAttribute,attEnt,true);
+             rf.populateMatrix(testMatrix, root, i);
         }
-        rf.populateMatrix(testMatrix);
+        
+        rf.findAccuracy(testMatrix);
         
         
         long RFstopTime = System.currentTimeMillis();
@@ -107,6 +117,7 @@ public class ID3 {
         System.out.println("Time taken for  the execution of Random Forest Algorithm: " + (double)(RFelapsedTime)/1000 + " seconds");
         System.out.println("********************************");
         System.out.println();
+        
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
@@ -123,7 +134,7 @@ public class ID3 {
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
   	 * @return The arrayList of tree nodes which are the children of the targetAttribute
   	 */
-  	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
+  	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		int positive=0,negative=0;
   		AttributeEntropy tempAtt = attEnt.get(targetAttribute);
@@ -138,6 +149,14 @@ public class ID3 {
   		}
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
+  		if(flag){
+  			RandomForrest rf = new RandomForrest();
+  	  		int attrToConsider[] = rf.generateRandomAttr(14,10);
+  	    	for(int j=0;j<attrToConsider.length;j++)
+  	    	{
+  	    		attEnt.get(attrToConsider[j]).flag = false;
+  	    	}
+  		}
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
   			if(base == -1){
@@ -173,7 +192,7 @@ public class ID3 {
                       root.add(tempTree);
   				}
   				else{
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt);
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt,flag);
 	  				root.add(tempTree);
   				}
   			}
@@ -186,7 +205,6 @@ public class ID3 {
   		}
   		return root;
   	}
-  	
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
   	 * @param attEnt : An array of objects which contain the entropy of each attribute 
@@ -642,8 +660,8 @@ public class ID3 {
   		Collections.sort(list);
 
   		for(int i=1;i<list.size();i++){
-  			_cnt.put(list.get(i),_cnt.get(list.get(i))+_cnt.get(list.get(i-1)));
-  			cnt_.put(list.get(i),cnt_.get(list.get(i))+cnt_.get(list.get(i-1)));
+  			_cnt.put(list.get(i),_cnt.get(list.get(i))+ _cnt.get(list.get(i-1)));
+  			cnt_.put(list.get(i),cnt_.get(list.get(i))+ cnt_.get(list.get(i-1)));
   		}
   		/**count matrix - count[0][i] and count[0][i+i] has the split value*/ 
   		/**count matrix - count[1][i] has no of instances <=50K and <=Split Value; count[1][i+1] has no of instances >Split Value and result <=50K*/

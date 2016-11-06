@@ -216,3 +216,4 @@ Caused by: org.apache.http.ConnectionClosedException: Premature end of Content-L
 	... 13 common frames omitted
 2016-11-06 13:18:00,492 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
 2016-11-06 15:44:57,080 [Worker-2] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2016-11-06 18:34:31,754 [Worker-2] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.

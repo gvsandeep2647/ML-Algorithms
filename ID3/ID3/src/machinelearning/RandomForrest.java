@@ -11,34 +11,39 @@ public class RandomForrest {
 	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
 	int resultRandom[][] = new int[15060][200];
 	/** An arrayList storing the root nodes of all the generated trees.*/
-	ArrayList<Tree> genTrees = new ArrayList<Tree>();
 	/**
-	 * @return An array of randomly chosen 10 numbers within the range 0-13 (both inclusive). The values will not repeat
+	 * @param limit : Random numbers will be generated between 0 - Limit
+	 * @param length : 'Length' number of random numbers will be generated
+	 * @return An array of randomly chosen 'length' numbers within the range 0-limit (both inclusive). The values will not repeat
 	 */
-	public int[] generateRandomAttr(){
-		int attr[] = new int[10];
+	public int[] generateRandomAttr(int limit,int length){
+		int attr[] = new int[length];
 		ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i=0; i<14; i++) {
+        for (int i=0; i<limit; i++) {
             list.add(new Integer(i));
         }
         Collections.shuffle(list);
-        for (int i=0;i<10; i++) {
+        for (int i=0;i<length; i++) {
             attr[i] = list.get(i);
         }
         return attr;
-	}
+	} 
 	/**
 	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-	 * @return A matrix which stores whether a tree has properly classified the given example or not.
+	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
 	 */
-	public int[] populateMatrix(int matrix[][]){
+	public void populateMatrix(int matrix[][],Tree root,int iter){	
+		
+		for(int j=0;j<matrix.length;j++)
+			resultRandom[j][iter] = root.traversal(matrix[j]);
+	}
+	/**
+	 * @param values : The values is an array returned by the populateMatrix function 
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Prints the accuracy of the Random Forest implementation
+	 */
+	public void findAccuracy(int matrix[][]){
 		int values[] = new int[matrix.length];
-		for(int i=0;i<genTrees.size();i++)
-		{
-			for(int j=0;j<matrix.length;j++)
-				resultRandom[j][i] = genTrees.get(i).traversal(matrix[j]);
-		}
-		System.out.println();
 		for(int i=0;i<matrix.length;i++)
 		{
 			int positive=0,negative=0;
@@ -46,25 +51,16 @@ public class RandomForrest {
 			{
 				if(resultRandom[i][j]==1)
 					positive++;
-				else
+				else 
 					negative++;
 			}
 			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
 		}
 		
-		findAccuracy(values,matrix);
-		return values;
-	}
-	/**
-	 * @param values : The values is an array returned by the populateMatrix function 
-	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-	 * Prints the accuracy of the Random Forest implementation
-	 */
-	public void findAccuracy(int values[],int matrix[][]){
 		double accuracy = 0.0;
   		int result[] = {0,0};
   		for(int i=0;i<values.length;i++){
-  			if(values[i]==matrix[i][14])
+  			if(values[i] == matrix[i][14])
   				result[1]++;
   			else
   				result[0]++;
@@ -74,4 +70,5 @@ public class RandomForrest {
 		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
   		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
 	}
+
 }

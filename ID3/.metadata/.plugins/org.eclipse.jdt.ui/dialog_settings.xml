@@ -14,7 +14,7 @@
 		<item value="false" key="nodeprecated"/>
 		<item value="false" key="nonavbar"/>
 		<item value="" key="docletpath"/>
-		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/src/machinelearning/ID3.java" key="javadoc_command_history"/>
+		<item value="/usr/lib/jvm/java-8-oracle/bin/javadoc:/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/src/machinelearning/ID3.java" key="javadoc_command_history"/>
 		<item value="1.8" key="source"/>
 		<item value="true" key="version"/>
 		<item value="ML Assignment - 1" key="doctitle"/>
@@ -22,12 +22,12 @@
 		<item value="true" key="splitindex"/>
 		<item value="true" key="fromStandard"/>
 		<item value="false" key="notree"/>
-		<item value="/home/sandeep/Desktop/Doc" key="destdir"/>
+		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/Documentation" key="destdir"/>
 		<item value="false" key="openinbrowser"/>
 		<section name="projects">
 			<section name="ID3">
 				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/javadoc.xml" key="antpath"/>
-				<item value="/home/sandeep/Desktop/Doc" key="destdir"/>
+				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/Documentation" key="destdir"/>
 				<item value="" key="href"/>
 			</section>
 		</section>

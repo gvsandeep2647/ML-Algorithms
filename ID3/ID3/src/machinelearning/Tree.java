@@ -69,7 +69,7 @@ public class Tree {
 	
 	/**
 	 * @param data The instance whose result the tree is supposed to predict
-	 * @return 0 if the tree mis-classifies data and 1 if the classification is correct
+	 * @return 0 if the tree miss-classifies data and 1 if the classification is correct
 	 * Traverses the tree from root to the leaf based on values of attributes in data and decides if tree has misclassified the data or not
 	 */
 	public int traversal(int[] data){
