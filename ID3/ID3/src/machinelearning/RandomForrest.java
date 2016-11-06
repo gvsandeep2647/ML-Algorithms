@@ -4,6 +4,7 @@ import java.util.*;
 
 public class RandomForrest {
 	int resultRandom[][] = new int[15060][200];
+
 	ArrayList<Tree> genTrees = new ArrayList<Tree>();
 	public int[] generateRandomAttr(){
 		int attr[] = new int[10];
