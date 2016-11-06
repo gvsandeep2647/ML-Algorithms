@@ -2,9 +2,13 @@ package machinelearning;
 
 import java.util.*;
 
+/**
+ * A class to implement Random Forest Algorithm on our generated ID3 trees.
+ * It stores all the root nodes of the generated trees and then traverses through each of the tree and stores the result of each tree.
+ * The we find the majority and give that as the result
+ */
 public class RandomForrest {
 	int resultRandom[][] = new int[15060][200];
-
 	ArrayList<Tree> genTrees = new ArrayList<Tree>();
 	public int[] generateRandomAttr(){
 		int attr[] = new int[10];
@@ -18,6 +22,10 @@ public class RandomForrest {
         }
         return attr;
 	}
+	/**
+	 * @param matrix :  Dataset
+	 * @return A matrix which stores whether a tree has properly classified the given example or not.
+	 */
 	public int[] populateMatrix(int matrix[][]){
 		int values[] = new int[matrix.length];
 		for(int i=0;i<genTrees.size();i++)
@@ -42,6 +50,11 @@ public class RandomForrest {
 		findAccuracy(values,matrix);
 		return values;
 	}
+	/**
+	 * @param values : The values is an array returned by the populateMatrix function 
+	 * @param matrix : The Dataset
+	 * Finds the accuracy of the Random Forest implementation
+	 */
 	public void findAccuracy(int values[],int matrix[][]){
 		double accuracy = 0.0;
   		int result[] = {0,0};

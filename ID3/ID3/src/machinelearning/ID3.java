@@ -74,6 +74,12 @@ public class ID3 {
         rf.populateMatrix(testMatrix);
   	}
   	
+  	/**
+  	 * @param matrix : The Dataset
+  	 * @param targetAttribute :  The Parent node at that level 
+  	 * @param attEnt : The arrayList of Attribute Entropy objects.
+  	 * @return The arrayList of tree nodes which are the children of the targetAttribute
+  	 */
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		int positive=0,negative=0;
@@ -196,8 +202,11 @@ public class ID3 {
 			matrices.add(datamodel[i]);
   		return matrices;
   	}
+  	
   	/**
-  	 * Populates the class variable matrix with the values as mentioned in the DataRef class. Aim is to make all the attributes numeric which will make data handling easy
+  	 * @param matrix : The matrix which is to be filled
+  	 * @param data : The DataSet
+  	 * Fills the matrix with the updated values according to the values in the DataRef.
   	 */
   	public static void formMatrix(int [][]matrix,ArrayList<DataSet>data){
   		int i = 0 ;
@@ -455,6 +464,11 @@ public class ID3 {
   			i++;
   		}
   	}
+  	/**
+  	 * @param testData : The matrix filled according to the testing data  
+  	 * @param root : The root node of the formed ID3 tree.
+  	 * Returns the accuracy of the model.
+  	 */
   	public static void calcAccuracy(int[][] testData,Tree root){
   		double accuracy = 0.0;
   		int result[] = {0,0};
@@ -471,9 +485,12 @@ public class ID3 {
   		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
   	}
   	
+  	
   	/**
+  	 * @param filename : the filename to be opened
+  	 * @param data : The ArrayList of data objects which is to be populated on the basis of data
   	 * @throws IOException
-  	 * Reads the data from the text file and stores it in the object.
+  	 * 
   	 */
   	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {
   		 BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -532,7 +549,7 @@ public class ID3 {
   	 * @param data : Data passed as a list of DataSet Objects 
   	 * @param param : parameter for which split is supposed to be calculated 
   	 * @return split : returns the value on which split should happen 
-  	 * Calculates where split should happen in continuous variables based on the entu index
+  	 * Calculates where split should happen in continuous variables based on the minimum entropy index
   	 */
   	public static int calcSplit(ArrayList<DataSet> data, String param){
   		Map<Integer, Integer> _cnt = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance <=50K
@@ -624,6 +641,10 @@ public class ID3 {
   		return split;
   	} 
   	
+  	/**
+  	 * @param matrix : The DataSet
+  	 * @return checks whether a matrix (result of a divide) contains only positively classified examples, negatively classified examples or a mix of those. This is to handle the base cases of the recursion
+  	 */
   	public static int checkPN(int matrix[][]){
   		int result = 0;
   		if(matrix.length == 0){

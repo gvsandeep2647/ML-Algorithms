@@ -2,19 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="adult.txt" key="selection"/>
+		<item value="Syste" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Syste"/>
+			<item value="printTree"/>
 			<item value="adult.txt"/>
 			<item value="gini"/>
 			<item value="printMap"/>
 			<item value="printMap()"/>
 			<item value="system.out"/>
 			<item value="matix"/>
-			<item value="test.txt"/>
 		</list>
 		<list key="replacehistory">
 			<item value="entu"/>

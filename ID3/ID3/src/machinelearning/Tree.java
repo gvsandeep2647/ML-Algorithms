@@ -81,8 +81,7 @@ public class Tree {
 			}
 		}
 		}catch(Exception e){
-			//System.out.println(e);
-		}
+			}
 		return value;
 	}
 
