@@ -4,19 +4,29 @@ import java.util.*;
 
 /**
  * @author Sandeep,Snehal,Kushagra,Tanmaya
- * AIM : To implement and find the efficiency of ID3 algorithm on a particular Dataset.
+ * @version 1.0
+ * @since 25-10-2016
  */
-
 public class ID3 {
+	/**stores the value at which the age has been split. It is calculated using the calcSplit() method.*/
 	static int ageSplit;
+	/**stores the value at which the fnlwgt has been split. It is calculated using the calcSplit() method.*/
 	static int fnlSplit;
+	/**stores the value at which the educationNum has been split. It is calculated using the calcSplit() method.*/
 	static int eduNumSplit;
+	/**stores the value at which the capitalGain has been split. It is calculated using the calcSplit() method.*/
 	static int capitalGainSplit;
+	/**stores the value at which the capitalLoss has been split. It is calculated using the calcSplit() method.*/
 	static int capitalLossSplit;
+	/**stores the value at which the hoursPerWeek has been split. It is calculated using the calcSplit() method.*/
 	static int hoursPerWeekSplit;
+	/**An ArrayList of <b>data</b> objects. Each data object stores the details pertaining to one row of the dataSet. This is for the <i>Training Data</i>*/
 	public static ArrayList<DataSet> data = new ArrayList<DataSet>();
+	/**An ArrayList of <b>data</b> objects. Each data object stores the details pertaining to one row of the dataSet. This is for the <i>Testing Data</i>*/
 	public static ArrayList<DataSet> testData = new ArrayList<DataSet>();
+	/**A matrix which stores the numeric values in the matrix according to values stored in the DataRef Class. This is for the <i>Training Data</i>*/
 	public static int matrix[][] = new int[30162][15];
+	/**A matrix which stores the numeric values in the matrix according to values stored in the DataRef Class. This is for the <i>Testing Data</i>*/
 	public static int testMatrix[][] = new int[15060][15];
 	public static void main(String[] args) {
         try{
@@ -27,7 +37,7 @@ public class ID3 {
         
         long LearningstartTime = System.currentTimeMillis();
         
-        /*Building ID3 starts*/
+        /**Building ID3 starts*/
         ageSplit = calcSplit(data,"age");
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
@@ -108,8 +118,8 @@ public class ID3 {
   	}
   	
   	/**
-  	 * @param matrix : The Dataset
-  	 * @param targetAttribute :  The Parent node at that level 
+  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+  	 * @param targetAttribute :  The Parent node at the current level 
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
   	 * @return The arrayList of tree nodes which are the children of the targetAttribute
   	 */
@@ -178,9 +188,9 @@ public class ID3 {
   	}
   	
   	/**
-  	 * @param matrix : DataSet 
-  	 * @param attEnt : attEnt , An array of objects which contain the entropy of each attribute 
-  	 * @return the attribute with the lowest entropy. 
+  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+  	 * @param attEnt : An array of objects which contain the entropy of each attribute 
+  	 * @return the attribute with the lowest entropy, which will form the root at the current level
   	 */
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
   		for(int i=0;i<14;i++){
@@ -202,7 +212,7 @@ public class ID3 {
   	
   	/**
   	 * @param attribute : The attribute on the basis of which we are dividing the data matrix 
-  	 * @param matrix : The matrix containing the data
+  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
   	 * @return An ArrayList of Matrices with data divided according to the unique values that the passed argument attribute can take.
   	 */
   	public static ArrayList<int[][]> createDataSet(int attribute,int matrix[][]){
@@ -238,7 +248,7 @@ public class ID3 {
   	
   	/**
   	 * @param matrix : The matrix which is to be filled
-  	 * @param data : The DataSet
+  	 * @param data : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
   	 * Fills the matrix with the updated values according to the values in the DataRef.
   	 */
   	public static void formMatrix(int [][]matrix,ArrayList<DataSet>data){
@@ -500,7 +510,7 @@ public class ID3 {
   	/**
   	 * @param testData : The matrix filled according to the testing data  
   	 * @param root : The root node of the formed ID3 tree.
-  	 * Returns the accuracy of the model.
+  	 * Prints the accuracy of the model.
   	 */
   	public static void calcAccuracy(int[][] testData,Tree root){
   		double accuracy = 0.0;
@@ -523,7 +533,7 @@ public class ID3 {
   	 * @param filename : the filename to be opened
   	 * @param data : The ArrayList of data objects which is to be populated on the basis of data
   	 * @throws IOException
-  	 * 
+  	 * @see IOException
   	 */
   	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {
   		 BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -582,7 +592,6 @@ public class ID3 {
   	 * @param data : Data passed as a list of DataSet Objects 
   	 * @param param : parameter for which split is supposed to be calculated 
   	 * @return split : returns the value on which split should happen 
-  	 * Calculates where split should happen in continuous variables based on the minimum entropy index
   	 */
   	public static int calcSplit(ArrayList<DataSet> data, String param){
   		Map<Integer, Integer> _cnt = new HashMap<Integer, Integer>();	//dictionary to store count of particular feature with result of instance <=50K
@@ -636,9 +645,9 @@ public class ID3 {
   			_cnt.put(list.get(i),_cnt.get(list.get(i))+_cnt.get(list.get(i-1)));
   			cnt_.put(list.get(i),cnt_.get(list.get(i))+cnt_.get(list.get(i-1)));
   		}
-  		//count matrix - count[0][i] and count[0][i+i] has the split value 
-  		//count matrix - count[1][i] has no of instances <=50K and <=Split Value; count[1][i+1] has no of instances >Split Value and result <=50K
-  		//count matrix - count[2][i] has no of instances >50K and <=Split Value; count[2][i+1] has no of instances >split value and result = >50K
+  		/**count matrix - count[0][i] and count[0][i+i] has the split value*/ 
+  		/**count matrix - count[1][i] has no of instances <=50K and <=Split Value; count[1][i+1] has no of instances >Split Value and result <=50K*/
+  		/**count matrix - count[2][i] has no of instances >50K and <=Split Value; count[2][i+1] has no of instances >split value and result = >50K*/
   		int count[][] = new int[3][(list.size()-1)*2];
   		
   		for(int i=0;i<list.size()-1;i++){
@@ -653,8 +662,6 @@ public class ID3 {
   		for(int i=0;i<(list.size()-1)*2;i+=2){
   			double total1 = count[1][i] + count[2][i];
   			double total2 = count[1][i+1] + count[2][i+1];
-  			//double gini1 = 1 - Math.pow(count[1][i]/total1,2) - Math.pow(count[2][i]/total1,2);
-  			//double gini2 = 1 - Math.pow(count[1][i+1]/total2, 2) - Math.pow(count[2][i+1]/total2,2);
   			double ent1,ent2;
   			if(count[1][i] == 0 || count[2][i]==0)
   				ent1 = 0.0;
@@ -675,7 +682,7 @@ public class ID3 {
   	} 
   	
   	/**
-  	 * @param matrix : The DataSet
+  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
   	 * @return checks whether a matrix (result of a divide) contains only positively classified examples, negatively classified examples or a mix of those. This is to handle the base cases of the recursion
   	 */
   	public static int checkPN(int matrix[][]){

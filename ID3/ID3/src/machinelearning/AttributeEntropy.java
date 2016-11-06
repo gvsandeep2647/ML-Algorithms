@@ -2,12 +2,16 @@ package machinelearning;
 import java.util.*;
 
 /**
- * A class which used for calculating the entropy of a given attribute in the passed dataset.
+ * A class which is used for calculating the entropy of a given attribute in the passed dataset.
  */
 public class AttributeEntropy {
+	/** The attribute for which the object stores information of */
 	public int attribute;
+	/** A map which has all the possible values an attribute can take and also stores the count of postive and negative examples*/
 	public Map<Integer,int[]> diversity;
+	/** To indicate whether the attribute is supposed to be considered while choosing the attribute with least entropy */
 	public boolean flag;
+	/** The value of entropy with the respect to this attribute */
 	double entropy;
 	public AttributeEntropy(int attribute) {
 		flag = true;
@@ -66,8 +70,7 @@ public class AttributeEntropy {
 	}
 	
 	/**
-	 * utility function
-	 * Used for printing the Map
+	 *  An utility function to print the Map of the object.
 	 */
 	public void printMap(){
 		for(Map.Entry<Integer, int[]> entry : diversity.entrySet()){

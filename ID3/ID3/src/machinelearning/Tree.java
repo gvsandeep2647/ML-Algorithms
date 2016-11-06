@@ -7,13 +7,22 @@ import java.util.*;
  *  and the list of children
  */
 public class Tree {
+	/** The attribute of the dataSet in consideration */
 	String attribute;
+	/** The value which the attribute has taken. */
 	String value;
+	/** Corresponding integer value for the attribute as defined in DataRef */
 	int intAttr;
+	/** Corresponding integer value for the value taken by the attribute as defined in DataRef */
 	int intVal;
+	/** All the possible subtrees of the current attribute and value pair.*/
 	ArrayList<Tree> children;
 	int cnt;
 	
+	/**
+	 * @param attribute : The attribute of the dataSet in consideration
+	 * @param value : The value which the attribute has taken.
+	 */
 	Tree(int attribute, int value){
 		DataRef temp = new DataRef();
 		this.attribute = temp.majorRef[attribute];

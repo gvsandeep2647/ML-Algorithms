@@ -17,13 +17,19 @@
 		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/src/machinelearning/ID3.java" key="javadoc_command_history"/>
 		<item value="1.8" key="source"/>
 		<item value="true" key="version"/>
+		<item value="ML Assignment - 1" key="doctitle"/>
 		<item value="" key="docletname"/>
 		<item value="true" key="splitindex"/>
 		<item value="true" key="fromStandard"/>
 		<item value="false" key="notree"/>
-		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/doc" key="destdir"/>
+		<item value="/home/sandeep/Desktop/Doc" key="destdir"/>
 		<item value="false" key="openinbrowser"/>
 		<section name="projects">
+			<section name="ID3">
+				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/javadoc.xml" key="antpath"/>
+				<item value="/home/sandeep/Desktop/Doc" key="destdir"/>
+				<item value="" key="href"/>
+			</section>
 		</section>
 	</section>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
@@ -41,6 +47,13 @@
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
 	</section>
 	<section name="quick_assist_proposal_size">
+	</section>
+	<section name="JavadocWizardDialog">
+		<item value="800" key="DIALOG_WIDTH"/>
+		<item value="1|Droid Serif|12.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="662" key="DIALOG_HEIGHT"/>
+		<item value="283" key="DIALOG_X_ORIGIN"/>
+		<item value="0" key="DIALOG_Y_ORIGIN"/>
 	</section>
 	<section name="completion_proposal_size">
 	</section>

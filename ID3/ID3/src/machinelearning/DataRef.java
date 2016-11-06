@@ -5,7 +5,9 @@ package machinelearning;
  * Used as a reference class to get back the original string of the attribute based on the value as in the matrix  
  */
 public class DataRef {
+	/** An array to find the attribute given an integer */
 	public String majorRef[] = new String[15];
+	/** An array to find the value of an attribute given the integers corresponding to majorRef and value  */
 	public String attrRef[][] = new String[15][];
 	DataRef(){
 		majorRef[0] = "age";

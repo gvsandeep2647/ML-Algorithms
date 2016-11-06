@@ -8,8 +8,13 @@ import java.util.*;
  * The we find the majority and give that as the result
  */
 public class RandomForrest {
+	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
 	int resultRandom[][] = new int[15060][200];
+	/** An arrayList storing the root nodes of all the generated trees.*/
 	ArrayList<Tree> genTrees = new ArrayList<Tree>();
+	/**
+	 * @return An array of randomly chosen 10 numbers within the range 0-13 (both inclusive). The values will not repeat
+	 */
 	public int[] generateRandomAttr(){
 		int attr[] = new int[10];
 		ArrayList<Integer> list = new ArrayList<Integer>();
@@ -23,7 +28,7 @@ public class RandomForrest {
         return attr;
 	}
 	/**
-	 * @param matrix :  Dataset
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
 	 * @return A matrix which stores whether a tree has properly classified the given example or not.
 	 */
 	public int[] populateMatrix(int matrix[][]){
@@ -52,8 +57,8 @@ public class RandomForrest {
 	}
 	/**
 	 * @param values : The values is an array returned by the populateMatrix function 
-	 * @param matrix : The Dataset
-	 * Finds the accuracy of the Random Forest implementation
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Prints the accuracy of the Random Forest implementation
 	 */
 	public void findAccuracy(int values[],int matrix[][]){
 		double accuracy = 0.0;
