@@ -49,8 +49,8 @@ public class ID3 {
         for(int i = 0;i<14;i++){
         	attEnt.add(new AttributeEntropy(i));
         }
-        
-        int firstAttribute = findA(matrix,attEnt);
+        int arr[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+        int firstAttribute = findA(matrix,attEnt,arr);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt,false);
         /*Building ID3 ends*/
@@ -86,18 +86,20 @@ public class ID3 {
 
         for(int i=0;i<200;i++)
         {
+        	System.out.println(i);
         	attEnt = new ArrayList<AttributeEntropy>();
         	for(int k = 0;k<14;k++){
             	attEnt.add(new AttributeEntropy(k));
             }
-        	int attrToConsider[] = rf.generateRandomAttr(14,10);
+        	int attrToConsider[] = generateRandomAttr(14,4);
         	
-        	for(int j=0;j<attrToConsider.length;j++)
-        		attEnt.get(attrToConsider[j]).flag = false;
+        	/*for(int j=0;j<attrToConsider.length;j++)
+        		attEnt.get(attrToConsider[j]).flag = false;*/
         	
-        	 firstAttribute = findA(matrix,attEnt);
+             
+        	 firstAttribute = findA(matrix,attEnt,attrToConsider);
              root = new Tree(firstAttribute,-1);
-             int tempArr[] = rf.generateRandomAttr(30162,20108);
+             int tempArr[] = generateRandomAttr(30162,20108);
              int tempMatrix[][] = new int[tempArr.length][15];
             
              for(int k = 0; k<tempMatrix.length;k++)
@@ -149,14 +151,14 @@ public class ID3 {
   		}
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
-  		if(flag){
+  		/*if(flag){
   			RandomForrest rf = new RandomForrest();
   	  		int attrToConsider[] = rf.generateRandomAttr(14,10);
   	    	for(int j=0;j<attrToConsider.length;j++)
   	    	{
   	    		attEnt.get(attrToConsider[j]).flag = false;
   	    	}
-  		}
+  		}*/
   		for(int i=0;i<temp.size();i++){
   			int base = checkPN(temp.get(i));
   			if(base == -1){
@@ -175,8 +177,17 @@ public class ID3 {
   					a.flag = attEnt.get(j).flag;
   					nextAttEnt.add(a);
   				}
+  				int nextAttribute = -1;
+  				if(!flag){
+  					int arr[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+  					nextAttribute = findA(temp.get(i),nextAttEnt,arr);
+  				}
+  				else{
+  					int attrToConsider[] = generateRandomAttr(14,4);
+  					nextAttribute = findA(temp.get(i),nextAttEnt,attrToConsider);
+  				}
+  				//System.out.println(nextAttribute);
   				nextAttEnt.get(targetAttribute).flag = false;
-  				int nextAttribute = findA(temp.get(i),nextAttEnt);
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
   					tempTree = new Tree(targetAttribute,i);
@@ -210,7 +221,7 @@ public class ID3 {
   	 * @param attEnt : An array of objects which contain the entropy of each attribute 
   	 * @return the attribute with the lowest entropy, which will form the root at the current level
   	 */
-  	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt){
+  	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt, int[] attributeToConsider){
   		for(int i=0;i<14;i++){
   				attEnt.get(i).updateFields(matrix);
   				attEnt.get(i).calcEntropy();
@@ -218,7 +229,7 @@ public class ID3 {
   		int A=-1;
   		double min = 5.0;
   		for(int i=0;i<14;i++){
-  			if(attEnt.get(i).flag){
+  			if(attEnt.get(i).flag && contains(i,attributeToConsider)){
   				if(attEnt.get(i).entropy<=min){
   					min = attEnt.get(i).entropy;
   					A = attEnt.get(i).attribute;
@@ -226,6 +237,15 @@ public class ID3 {
   			}
   		}
   		return A;
+  	}
+  	
+  	public static boolean contains(int val, int arr[]){
+  		for(int i=0;i<arr.length;i++){
+  			if(val == arr[i]){
+  				return true;
+  			}
+  		}
+  		return false;
   	}
   	
   	/**
@@ -721,4 +741,23 @@ public class ID3 {
   		else
   			return 0;
   	}
+  	
+  	/** An arrayList storing the root nodes of all the generated trees.*/
+	/**
+	 * @param limit : Random numbers will be generated between 0 - Limit
+	 * @param length : 'Length' number of random numbers will be generated
+	 * @return An array of randomly chosen 'length' numbers within the range 0-limit (both inclusive). The values will not repeat
+	 */
+	public static int[] generateRandomAttr(int limit,int length){
+		int attr[] = new int[length];
+		ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0; i<limit; i++) {
+            list.add(new Integer(i));
+        }
+        Collections.shuffle(list);
+        for (int i=0;i<length; i++) {
+            attr[i] = list.get(i);
+        }
+        return attr;
+	} 
 }
