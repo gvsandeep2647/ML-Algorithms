@@ -60,8 +60,7 @@ public class ID3 {
         long TeststopTime = System.currentTimeMillis();
         long totelapsedTime = TeststopTime - TeststartTime;
         System.out.println("Time taken for learning and building the ID3 also predicting the results on the test data: " + (double)(elapsedTime+totelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
+        
         
        /*  RANDOM FOREST IMPLEMENTATION   */
        /**
@@ -95,8 +94,7 @@ public class ID3 {
         long RFstopTime = System.currentTimeMillis();
         long RFelapsedTime = RFstopTime - RFstartTime;
         System.out.println("Time taken for  the execution of Random Forest Algorithm: " + (double)(RFelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
+        
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
@@ -104,7 +102,7 @@ public class ID3 {
         
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
-        System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
+        System.out.println("Time taken for the execution after implemneting the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
   	}
   	
   	/**

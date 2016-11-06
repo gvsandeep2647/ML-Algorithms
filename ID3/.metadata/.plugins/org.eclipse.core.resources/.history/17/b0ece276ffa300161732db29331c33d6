@@ -27,7 +27,7 @@ public class ID3 {
         
         long LearningstartTime = System.currentTimeMillis();
         
-        /*Building ID3 starts*/
+        
         ageSplit = calcSplit(data,"age");
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
@@ -43,7 +43,7 @@ public class ID3 {
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
         root.children = runID3(matrix,firstAttribute,attEnt);
-        /*Building ID3 ends*/
+        
         
         long LearningstopTime = System.currentTimeMillis();
         long elapsedTime = LearningstopTime - LearningstartTime;
@@ -54,23 +54,14 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println("Test "+e);
         }
-        long TeststartTime = System.currentTimeMillis();
+        
         formMatrix(testMatrix,testData);
         calcAccuracy(testMatrix,root);
-        long TeststopTime = System.currentTimeMillis();
-        long totelapsedTime = TeststopTime - TeststartTime;
-        System.out.println("Time taken for learning and building the ID3 also predicting the results on the test data: " + (double)(elapsedTime+totelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
-        
-       /*  RANDOM FOREST IMPLEMENTATION   */
+
        /**
         * Random Forest Implementation Begins here.
         * 200 trees of 4 attributes each.
         * */
-        long RFstartTime = System.currentTimeMillis();
-        
-        
         RandomForrest rf = new RandomForrest();
         for(int i=0;i<200;i++)
         {
@@ -90,21 +81,6 @@ public class ID3 {
              rf.genTrees.add(root);
         }
         rf.populateMatrix(testMatrix);
-        
-        
-        long RFstopTime = System.currentTimeMillis();
-        long RFelapsedTime = RFstopTime - RFstartTime;
-        System.out.println("Time taken for  the execution of Random Forest Algorithm: " + (double)(RFelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
-        /*  AdaBoost  */
-        long AdastartTime = System.currentTimeMillis();
-        
-        
-        
-        long AdastopTime = System.currentTimeMillis();
-        long AdaelapsedTime = AdastopTime - AdastartTime;
-        System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
   	}
   	
   	/**

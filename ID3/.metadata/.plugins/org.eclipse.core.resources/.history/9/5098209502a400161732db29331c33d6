@@ -104,7 +104,7 @@ public class ID3 {
         
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
-        System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
+        System.out.println("Time taken for the execution after implemneting the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
   	}
   	
   	/**

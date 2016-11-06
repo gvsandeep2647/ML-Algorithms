@@ -59,18 +59,14 @@ public class ID3 {
         calcAccuracy(testMatrix,root);
         long TeststopTime = System.currentTimeMillis();
         long totelapsedTime = TeststopTime - TeststartTime;
-        System.out.println("Time taken for learning and building the ID3 also predicting the results on the test data: " + (double)(elapsedTime+totelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
+        System.out.println("Time taken for learning and building the ID3: " + (double)elapsedTime/1000 + " seconds");
         
-       /*  RANDOM FOREST IMPLEMENTATION   */
+        
+
        /**
         * Random Forest Implementation Begins here.
         * 200 trees of 4 attributes each.
         * */
-        long RFstartTime = System.currentTimeMillis();
-        
-        
         RandomForrest rf = new RandomForrest();
         for(int i=0;i<200;i++)
         {
@@ -90,21 +86,6 @@ public class ID3 {
              rf.genTrees.add(root);
         }
         rf.populateMatrix(testMatrix);
-        
-        
-        long RFstopTime = System.currentTimeMillis();
-        long RFelapsedTime = RFstopTime - RFstartTime;
-        System.out.println("Time taken for  the execution of Random Forest Algorithm: " + (double)(RFelapsedTime)/1000 + " seconds");
-        System.out.println("********************************");
-        System.out.println();
-        /*  AdaBoost  */
-        long AdastartTime = System.currentTimeMillis();
-        
-        
-        
-        long AdastopTime = System.currentTimeMillis();
-        long AdaelapsedTime = AdastopTime - AdastartTime;
-        System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
   	}
   	
   	/**
