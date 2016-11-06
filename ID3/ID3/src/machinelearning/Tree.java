@@ -80,10 +80,8 @@ public class Tree {
 		while(true){
 			currAttr = tempNode.children.get(0).intAttr;
 			if(currAttr==14){
-				if(data[currAttr]==0)
-					this.cnt++;
+					
 				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
-				
 				break;
 			}else{
 				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
