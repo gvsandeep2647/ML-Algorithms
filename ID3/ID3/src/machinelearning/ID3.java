@@ -79,6 +79,8 @@ public class ID3 {
         * Random Forest Implementation Begins here.
         * 200 trees of 4 attributes each.
         * */
+        
+        /*
         long RFstartTime = System.currentTimeMillis();
         
         
@@ -115,10 +117,12 @@ public class ID3 {
         System.out.println("********************************");
         System.out.println();
         
+        */
+        
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(100);
+        AdaBoost ab = new AdaBoost(1000);
         ab.adaBoost(matrix);
         ab.calcAccuracy(testMatrix);
         
@@ -132,6 +136,15 @@ public class ID3 {
   	 * @param targetAttribute :  The Parent node at the current level 
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
   	 * @return The arrayList of tree nodes which are the children of the targetAttribute
+  	 */
+	
+	
+  	/**
+  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+  	 * @param targetAttribute :  The Parent node at the current level 
+  	 * @param attEnt : The arrayList of Attribute Entropy objects.
+  	 * @param flag :  
+  	 * @return
   	 */
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag){
   		ArrayList<Tree> root = new ArrayList<Tree>();
