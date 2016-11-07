@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class RandomForrest {
 	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
-	int resultRandom[][] = new int[15060][200];
+	int resultRandom[][] = new int[15060][300];
 	
 	/**
 	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method

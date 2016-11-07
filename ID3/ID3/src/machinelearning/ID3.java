@@ -37,7 +37,7 @@ public class ID3 {
         
         long LearningstartTime = System.currentTimeMillis();
         
-        /**Building ID3 starts*/
+        /*Building ID3 starts*/
         ageSplit = calcSplit(data,"age");
         fnlSplit = calcSplit(data,"fnlwgt");
         eduNumSplit = calcSplit(data,"educationNum");
@@ -77,14 +77,14 @@ public class ID3 {
        /*  RANDOM FOREST IMPLEMENTATION   */
        /**
         * Random Forest Implementation Begins here.
-        * 200 trees of 4 attributes each.
+        * 300 trees of 4 attributes each.
         * */
         long RFstartTime = System.currentTimeMillis();
         
         
         RandomForrest rf = new RandomForrest();
 
-        for(int i=0;i<200;i++)
+        for(int i=0;i<300;i++)
         {
         	System.out.println(i);
         	attEnt = new ArrayList<AttributeEntropy>();
@@ -93,10 +93,6 @@ public class ID3 {
             }
         	int attrToConsider[] = generateRandomAttr(14,4);
         	
-        	/*for(int j=0;j<attrToConsider.length;j++)
-        		attEnt.get(attrToConsider[j]).flag = false;*/
-        	
-             
         	 firstAttribute = findA(matrix,attEnt,attrToConsider);
              root = new Tree(firstAttribute,-1);
              int tempArr[] = generateRandomAttr(30162,20108);
@@ -186,7 +182,6 @@ public class ID3 {
   					int attrToConsider[] = generateRandomAttr(14,4);
   					nextAttribute = findA(temp.get(i),nextAttEnt,attrToConsider);
   				}
-  				//System.out.println(nextAttribute);
   				nextAttEnt.get(targetAttribute).flag = false;
   				Tree tempTree = new Tree(targetAttribute,i);
   				if(nextAttribute==-1){
