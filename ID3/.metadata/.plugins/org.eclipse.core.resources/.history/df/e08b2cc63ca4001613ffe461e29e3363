@@ -1,5 +1,6 @@
 package machinelearning;
 
+import java.util.*;
 
 /**
  * A class to implement Random Forest Algorithm on our generated ID3 trees.
@@ -8,8 +9,25 @@ package machinelearning;
  */
 public class RandomForrest {
 	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
-	int resultRandom[][] = new int[15060][300];
-	
+	int resultRandom[][] = new int[15060][200];
+	/** An arrayList storing the root nodes of all the generated trees.*/
+	/**
+	 * @param limit : Random numbers will be generated between 0 - Limit
+	 * @param length : 'Length' number of random numbers will be generated
+	 * @return An array of randomly chosen 'length' numbers within the range 0-limit (both inclusive). The values will not repeat
+	 */
+	public int[] generateRandomAttr(int limit,int length){
+		int attr[] = new int[length];
+		ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0; i<limit; i++) {
+            list.add(new Integer(i));
+        }
+        Collections.shuffle(list);
+        for (int i=0;i<length; i++) {
+            attr[i] = list.get(i);
+        }
+        return attr;
+	} 
 	/**
 	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
 	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
@@ -24,6 +42,7 @@ public class RandomForrest {
 	 * Prints the accuracy of the Random Forest implementation
 	 */
 	public void findAccuracy(int matrix[][]){
+		int count = 0;
 		int values[] = new int[matrix.length];
 		for(int i=0;i<matrix.length;i++)
 		{
@@ -38,7 +57,7 @@ public class RandomForrest {
 			
 			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
 		}
-
+		
 		double accuracy = 0.0;
   		int result[] = {0,0};
   		for(int i=0;i<values.length;i++){
@@ -52,4 +71,5 @@ public class RandomForrest {
 		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
   		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
 	}
+
 }
