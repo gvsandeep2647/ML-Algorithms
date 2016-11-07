@@ -14,12 +14,18 @@ public class RandomForrest {
 	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
 	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
 	 */
+	
+	
+	/**
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * @param root : The tree in which we would be traversing
+	 * @param iter : number of the tree
+	 */
 	public void populateMatrix(int matrix[][],Tree root,int iter){	
 		for(int j=0;j<matrix.length;j++)
 			resultRandom[j][iter] = root.traversal(matrix[j]);
 	}
 	/**
-	 * @param values : The values is an array returned by the populateMatrix function 
 	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
 	 * Prints the accuracy of the Random Forest implementation
 	 */

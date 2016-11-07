@@ -75,12 +75,13 @@ public class ID3 {
         System.out.println();
         
        /*  RANDOM FOREST IMPLEMENTATION   */
-       /**
+       
+        /**
         * Random Forest Implementation Begins here.
         * 300 trees of 4 attributes each.
         * */
         
-        /*
+       /* 
         long RFstartTime = System.currentTimeMillis();
         
         
@@ -116,33 +117,26 @@ public class ID3 {
         System.out.println("********************************");
         System.out.println();
         
-        */
         
+        */
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(1000);
+        AdaBoost ab = new AdaBoost(10);
+        
         ab.adaBoost(matrix);
         ab.calcAccuracy(testMatrix);
-        
+    
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
         System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
   	}
-  	
+
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-  	 * @param targetAttribute :  The Parent node at the current level 
+  	 * @param targetAttribute : The Parent node at the current level 
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
-  	 * @return The arrayList of tree nodes which are the children of the targetAttribute
-  	 */
-	
-	
-  	/**
-  	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-  	 * @param targetAttribute :  The Parent node at the current level 
-  	 * @param attEnt : The arrayList of Attribute Entropy objects.
-  	 * @param flag :  
+  	 * @param flag :  will be true if we are implementing random forest i.e random selection of attributes. False otherwise
   	 * @return
   	 */
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag){
@@ -216,9 +210,11 @@ public class ID3 {
   		}
   		return root;
   	}
+  	
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
   	 * @param attEnt : An array of objects which contain the entropy of each attribute 
+  	 * @param attributeToConsider : An array of attributes to be considered while choosing the next node.
   	 * @return the attribute with the lowest entropy, which will form the root at the current level
   	 */
   	public static int findA(int matrix[][], ArrayList<AttributeEntropy> attEnt, int[] attributeToConsider){
@@ -239,6 +235,11 @@ public class ID3 {
   		return A;
   	}
   	
+  	/**
+  	 * @param val : key to be searched
+  	 * @param arr : data in which we have to search
+  	 * @return an utility function which says whether an element exists in the array or not.
+  	 */
   	public static boolean contains(int val, int arr[]){
   		for(int i=0;i<arr.length;i++){
   			if(val == arr[i]){
@@ -742,7 +743,6 @@ public class ID3 {
   			return 0;
   	}
   	
-  	/** An arrayList storing the root nodes of all the generated trees.*/
 	/**
 	 * @param limit : Random numbers will be generated between 0 - Limit
 	 * @param length : 'Length' number of random numbers will be generated

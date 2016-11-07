@@ -1,14 +1,25 @@
 package machinelearning;
 import java.util.*;
+/**
+ *  A class which returns random numbers based on a given probability distribution
+ *
+ */
 public class DistributedRandomNumberGenerator {
 
     private HashMap<Integer, Double> distribution;
     private double distSum;
 
+    /**
+     * Initializes the class with a private variable distribution
+     */
     public DistributedRandomNumberGenerator() {
         distribution = new HashMap<>();
     }
 
+    /**
+     * @param value : The number to be inserted
+     * @param distribution : The probabilty of that number being selected
+     */
     public void addNumber(int value, double distribution) {
         if (this.distribution.get(value) != null) {
             distSum -= this.distribution.get(value);
@@ -17,6 +28,9 @@ public class DistributedRandomNumberGenerator {
         distSum += distribution;
     }
 
+    /**
+     * @return : A random number based on the probability distribution
+     */
     public int getDistributedRandomNumber() {
         double rand = Math.random();
         double ratio = 1.0f / distSum;

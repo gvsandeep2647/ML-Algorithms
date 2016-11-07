@@ -1,16 +1,29 @@
 package machinelearning;
 import java.util.*;
 
+/**
+ * A class to implement AdaBoost on our ID3 trees. 
+ * It learns from 'num_trees' number of samples where each sample has 2/3rd of the entire Data.
+ * It then associates each tree with a weight based on the error of classification of the tree.
+ * The weights of each miss classified example is then updated based on the error of that particular tree.
+ * At the end sign of the linear combination of all the trees give us the prediction and based on this the error is calculated.
+ */
 class AdaBoost {
 	double[] alphas;
 	ArrayList<Tree> trees = new ArrayList<Tree>();
 	double values[] = new double[15060];
 	int num_trees;
+	/**
+	 * @param num : The number of trees to be generated.
+	 */
 	AdaBoost(int num){
 		num_trees= num;
 		alphas = new double[num];
 	}
-	 public void adaBoost(int matrix[][]){
+	 /**
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 */
+	public void adaBoost(int matrix[][]){
 		 double[] weights = new double[matrix.length];
 		 
 		 for(int i=0;i<matrix.length;i++)
@@ -21,14 +34,6 @@ class AdaBoost {
 		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
 		 for(int i = 0 ; i<num_trees;i++)
 		 {
-			 attEnt = new ArrayList<AttributeEntropy>();
-			 for(int k = 0;k<14;k++){
-				 attEnt.add(new AttributeEntropy(k));
-			 }
-			 int attrToConsider[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
-
-			 int firstAttribute = ID3.findA(matrix,attEnt,attrToConsider);
-			 root = new Tree(firstAttribute,-1);
 			 DistributedRandomNumberGenerator drng = new DistributedRandomNumberGenerator();
 			 for(int s=0;s<30162;s++)
 			 {
@@ -40,37 +45,44 @@ class AdaBoost {
 				 tempArr[p] = drng.getDistributedRandomNumber();
 			 }
              int tempMatrix[][] = new int[tempArr.length][15];
-             for(int k = 0; k<tempMatrix.length;k++)
+             for(int k = 0; k<20108;k++)
              {
         		 tempMatrix[k] = matrix[tempArr[k]];
              }
-             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,true);
+             attEnt = new ArrayList<AttributeEntropy>();
+			 for(int k = 0;k<14;k++){
+				 attEnt.add(new AttributeEntropy(k));
+			 }
+			 int attrToConsider[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+
+			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
+			 root = new Tree(firstAttribute,-1);
+             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
              trees.add(root);
+
              int posClass[] = new int[30162];
              for(int l=0;l<matrix.length;l++)
              {
             	 posClass[l] = root.traversal(matrix[l]);
              }
-			 int pos=0 ,neg=0;
-			 for(int l =0;l<posClass.length;l++)
+			 double error =0.0;
+			 for(int l=0;l<posClass.length;l++)
 			 {
 				 if(posClass[l]==0)
-					 pos++;
-				 else
-					 neg++;
+					 error += weights[l];
 			 }
-			 double error = (double)pos/neg;
+			 
 			 alphas[i] = 0.5*Math.log((1-error)/error);
 			 double sum_W = 0.0;
 			 for(int l =0;l<posClass.length;l++)
 			 {
 				 if(posClass[l]==1)
 	                {
-	                    weights[l]=weights[l]*Math.exp(alphas[i]);
+	                    weights[l]=weights[l]*Math.exp(-alphas[i]);
 	                }
 	                else
 	                {
-	                    weights[l]=weights[l]*Math.exp(-alphas[i]);
+	                    weights[l]=weights[l]*Math.exp(alphas[i]);
 	                }
 	                sum_W+=weights[l];
 			 }
@@ -81,7 +93,11 @@ class AdaBoost {
 		 }
 	 }
 	 
-	 public void calcAccuracy(int testMatrix[][]){
+	 /**
+	 * @param testMatrix : The TestMatrix formed after running formMatrix() on testData.
+	 * Calculates the accuracy after the implementation of the boosting technique
+	 */
+	public void calcAccuracy(int testMatrix[][]){
 		 double accuracy = 0.0;
 	  		int result[] = {0,0};
 	  		for(int i=0;i<testMatrix.length;i++){
