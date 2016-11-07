@@ -122,9 +122,9 @@ public class ID3 {
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(10);
+        AdaBoost ab = new AdaBoost(3000,500);
         
-        ab.adaBoost(matrix);
+        ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);
     
         long AdastopTime = System.currentTimeMillis();

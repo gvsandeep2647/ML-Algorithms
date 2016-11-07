@@ -9,22 +9,29 @@ import java.util.*;
  * At the end sign of the linear combination of all the trees give us the prediction and based on this the error is calculated.
  */
 class AdaBoost {
-	double[] alphas;
-	ArrayList<Tree> trees = new ArrayList<Tree>();
+	
+	
 	double values[] = new double[15060];
 	int num_trees;
+	int num_rows;
 	/**
 	 * @param num : The number of trees to be generated.
 	 */
-	AdaBoost(int num){
-		num_trees= num;
-		alphas = new double[num];
+	AdaBoost(int num_trees, int num_rows){
+		this.num_trees= num_trees;
+		this.num_rows = num_rows;
+		
 	}
 	 /**
 	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
 	 */
-	public void adaBoost(int matrix[][]){
+	public void adaBoost(int matrix[][], int testMatrix[][]){
 		 double[] weights = new double[matrix.length];
+		 int tempMatrix[][] = new int[num_rows][15];
+		 int posClass[] = new int[30162];
+		 double error = 0.0;
+		 double sum_W = 0.0;
+		 double alpha = 0.0;
 		 
 		 for(int i=0;i<matrix.length;i++)
 		 {
@@ -34,20 +41,15 @@ class AdaBoost {
 		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
 		 for(int i = 0 ; i<num_trees;i++)
 		 {
-			 DistributedRandomNumberGenerator drng = new DistributedRandomNumberGenerator();
-			 for(int s=0;s<30162;s++)
+			 System.out.println(i);
+			 /*for(int p=0;p<num_rows;p++)
 			 {
-				 drng.addNumber(s, weights[s]);
+				 tempArr[p] = ;
 			 }
-			 int tempArr[] = new int[20108];
-			 for(int p=0;p<20108;p++)
-			 {
-				 tempArr[p] = drng.getDistributedRandomNumber();
-			 }
-             int tempMatrix[][] = new int[tempArr.length][15];
-             for(int k = 0; k<20108;k++)
+             */
+             for(int k = 0; k<num_rows; k++)
              {
-        		 tempMatrix[k] = matrix[tempArr[k]];
+        		 tempMatrix[k] = matrix[getDistributedRandomNumber(weights)];
              }
              attEnt = new ArrayList<AttributeEntropy>();
 			 for(int k = 0;k<14;k++){
@@ -58,31 +60,34 @@ class AdaBoost {
 			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
 			 root = new Tree(firstAttribute,-1);
              root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
-             trees.add(root);
+             
 
-             int posClass[] = new int[30162];
+             error =0.0;
              for(int l=0;l<matrix.length;l++)
              {
             	 posClass[l] = root.traversal(matrix[l]);
+            	if( posClass[l]==0)
+            		error += weights[l];
              }
-			 double error =0.0;
-			 for(int l=0;l<posClass.length;l++)
+			 
+			 //error = (double)(incorr)/(corr+incorr);
+			 /*for(int l=0;l<posClass.length;l++)
 			 {
 				 if(posClass[l]==0)
 					 error += weights[l];
-			 }
+			 }*/
 			 
-			 alphas[i] = 0.5*Math.log((1-error)/error);
-			 double sum_W = 0.0;
+			 alpha = 0.5*Math.log((1-error)/error);
+			 sum_W = 0.0;
 			 for(int l =0;l<posClass.length;l++)
 			 {
 				 if(posClass[l]==1)
 	                {
-	                    weights[l]=weights[l]*Math.exp(-alphas[i]);
+	                    weights[l]=weights[l]*Math.exp(-alpha);
 	                }
 	                else
 	                {
-	                    weights[l]=weights[l]*Math.exp(alphas[i]);
+	                    weights[l]=weights[l]*Math.exp(alpha);
 	                }
 	                sum_W+=weights[l];
 			 }
@@ -90,6 +95,17 @@ class AdaBoost {
 			 {
                 weights[j]=weights[j]/sum_W;
 			 }
+			 
+			 
+			 for(int j = 0;j<testMatrix.length;j++){
+				 int temporary;
+				 if(root.traversal(testMatrix[j])==1)
+					temporary = (testMatrix[j][14]==0)?-1:1;
+				 else
+					temporary = (1-testMatrix[j][14]==0)?-1:1;
+				values[j] += alpha * temporary;
+			 }
+			
 		 }
 	 }
 	 
@@ -100,18 +116,8 @@ class AdaBoost {
 	public void calcAccuracy(int testMatrix[][]){
 		 double accuracy = 0.0;
 	  		int result[] = {0,0};
-	  		for(int i=0;i<testMatrix.length;i++){
-	  			for(int j =0;j<num_trees;j++){
-	  				int temporary;
-	  				if(trees.get(j).traversal(testMatrix[i])==1)
-	  					temporary = (testMatrix[i][14]==0)?-1:1;
-	  				else
-	  					temporary = (1-testMatrix[i][14]==0)?-1:1;
-	  				values[i] += alphas[j] * temporary;
-	  			}
-	  		}
 	  		for(int i=0;i<values.length;i++){
-	  			if(values[i]>=0)
+	  			if(values[i]>0)
 	  			{
 	  				if(testMatrix[i][14]==1)
 	  					result[1]++;
@@ -130,4 +136,29 @@ class AdaBoost {
 			System.out.println("Accuracy of the Adaboost is : " + accuracy+"%");
 	  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
 	 }
+	
+	 public int getDistributedRandomNumber(double distribution[]) {
+	        double rand = Math.random();
+	        /*double ratio = 1.0f / distSum;
+	        double tempDist = 0;
+	        for (Integer i : distribution.keySet()) {
+	            tempDist += distribution.get(i);
+	            if (rand / ratio <= tempDist) {
+	                return i;
+	            }
+	        }*/
+	        double[] cumul = new double[distribution.length];
+	        cumul[0] = distribution[0];
+	        for(int i=1;i<cumul.length;i++){
+	        	cumul[i] = cumul[i-1] + distribution[i];
+	        }
+	        for(int j=0;j<cumul.length;j++)
+	        {
+	            if(rand<=cumul[j])
+	            {
+	                return j;
+	            }
+	        }
+	        return 0;
+	    }
 }
