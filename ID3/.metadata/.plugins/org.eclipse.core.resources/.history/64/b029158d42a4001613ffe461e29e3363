@@ -52,7 +52,7 @@ public class ID3 {
         
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
-        root.children = runID3(matrix,firstAttribute,attEnt,false,false);
+        root.children = runID3(matrix,firstAttribute,attEnt,false);
         /*Building ID3 ends*/
         
         long LearningstopTime = System.currentTimeMillis();
@@ -149,7 +149,7 @@ public class ID3 {
   		}
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
-  		if(flag1){
+  		if(flag){
   			RandomForrest rf = new RandomForrest();
   	  		int attrToConsider[] = rf.generateRandomAttr(14,10);
   	    	for(int j=0;j<attrToConsider.length;j++)
@@ -192,7 +192,7 @@ public class ID3 {
                       root.add(tempTree);
   				}
   				else{
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt,flag,(flag)?true:false);
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt,flag);
 	  				root.add(tempTree);
   				}
   			}

@@ -70,4 +70,5 @@ public class RandomForrest {
 		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
   		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
 	}
+
 }

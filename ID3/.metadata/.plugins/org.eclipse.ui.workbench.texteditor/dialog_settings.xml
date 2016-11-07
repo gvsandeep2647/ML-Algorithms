@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="populate" key="selection"/>
+		<item value="genTrees" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="genTrees"/>
 			<item value="populate"/>
 			<item value="Syste"/>
 			<item value="printTree"/>
@@ -15,7 +16,6 @@
 			<item value="gini"/>
 			<item value="printMap"/>
 			<item value="printMap()"/>
-			<item value="system.out"/>
 		</list>
 		<list key="replacehistory">
 			<item value="entu"/>

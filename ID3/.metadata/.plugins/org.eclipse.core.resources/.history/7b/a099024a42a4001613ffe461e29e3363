@@ -52,7 +52,7 @@ public class ID3 {
         
         int firstAttribute = findA(matrix,attEnt);
         Tree root = new Tree(firstAttribute,-1);
-        root.children = runID3(matrix,firstAttribute,attEnt,false,false);
+        root.children = runID3(matrix,firstAttribute,attEnt,false);
         /*Building ID3 ends*/
         
         long LearningstopTime = System.currentTimeMillis();
@@ -97,7 +97,7 @@ public class ID3 {
         	
         	 firstAttribute = findA(matrix,attEnt);
              root = new Tree(firstAttribute,-1);
-             int tempArr[] = rf.generateRandomAttr(30162,30162);
+             int tempArr[] = rf.generateRandomAttr(30162,20108);
              int tempMatrix[][] = new int[tempArr.length][15];
             
              for(int k = 0; k<tempMatrix.length;k++)
@@ -105,7 +105,7 @@ public class ID3 {
         		 tempMatrix[k] = matrix[tempArr[k]];
              }
              
-             root.children = runID3(tempMatrix,firstAttribute,attEnt,true,false);
+             root.children = runID3(tempMatrix,firstAttribute,attEnt,false);
              rf.populateMatrix(testMatrix, root, i);
         }
         
@@ -134,7 +134,7 @@ public class ID3 {
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
   	 * @return The arrayList of tree nodes which are the children of the targetAttribute
   	 */
-  	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag,boolean flag1){
+  	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag){
   		ArrayList<Tree> root = new ArrayList<Tree>();
   		int positive=0,negative=0;
   		AttributeEntropy tempAtt = attEnt.get(targetAttribute);
@@ -149,7 +149,7 @@ public class ID3 {
   		}
   		ArrayList<int[][]> temp = createDataSet(targetAttribute,matrix);
   		ArrayList<AttributeEntropy> nextAttEnt = new ArrayList<AttributeEntropy>();
-  		if(flag1){
+  		if(flag){
   			RandomForrest rf = new RandomForrest();
   	  		int attrToConsider[] = rf.generateRandomAttr(14,10);
   	    	for(int j=0;j<attrToConsider.length;j++)
@@ -192,7 +192,7 @@ public class ID3 {
                       root.add(tempTree);
   				}
   				else{
-	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt,flag,(flag)?true:false);
+	  				tempTree.children = runID3(temp.get(i),nextAttribute,nextAttEnt,flag);
 	  				root.add(tempTree);
   				}
   			}
