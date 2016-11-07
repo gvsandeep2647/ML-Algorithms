@@ -118,8 +118,9 @@ public class ID3 {
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost();
-        ab.adaBoost(200,matrix);
+        AdaBoost ab = new AdaBoost(100);
+        ab.adaBoost(matrix);
+        ab.calcAccuracy(testMatrix);
         
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
