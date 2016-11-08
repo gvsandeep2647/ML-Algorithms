@@ -1,0 +1,134 @@
+package machinelearning;
+import java.util.*;
+
+/**
+ * A class to implement AdaBoost on our ID3 trees. 
+ * It learns from 'num_trees' number of samples where each sample has 2/3rd of the entire Data.
+ * It then associates each tree with a weight based on the error of classification of the tree.
+ * The weights of each miss classified example is then updated based on the error of that particular tree.
+ * At the end sign of the linear combination of all the trees give us the prediction and based on this the error is calculated.
+ */
+class AdaBoost {
+	double[] alphas;
+	ArrayList<Tree> trees = new ArrayList<Tree>();
+	double values[] = new double[15060];
+	int num_trees;
+	int num_rows;
+	/**
+	 * @param num : The number of trees to be generated.
+	 */
+	AdaBoost(int num){
+		num_trees= num;
+		alphas = new double[num];
+	}
+	 /**
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 */
+	public void adaBoost(int matrix[][]){
+		 double[] weights = new double[matrix.length];
+		 
+		 for(int i=0;i<matrix.length;i++)
+		 {
+			 weights[i]=1.0/(double)matrix.length;
+		 }
+		 Tree root = new Tree(0, 0);
+		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
+		 for(int i = 0 ; i<num_trees;i++)
+		 {
+			 DistributedRandomNumberGenerator drng = new DistributedRandomNumberGenerator();
+			 for(int s=0;s<30162;s++)
+			 {
+				 drng.addNumber(s, weights[s]);
+			 }
+			 int tempArr[] = new int[1000];
+			 for(int p=0;p<1000;p++)
+			 {
+				 tempArr[p] = drng.getDistributedRandomNumber();
+			 }
+             int tempMatrix[][] = new int[tempArr.length][15];
+             for(int k = 0; k<1000;k++)
+             {
+        		 tempMatrix[k] = matrix[tempArr[k]];
+             }
+             attEnt = new ArrayList<AttributeEntropy>();
+			 for(int k = 0;k<14;k++){
+				 attEnt.add(new AttributeEntropy(k));
+			 }
+			 int attrToConsider[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
+
+			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
+			 root = new Tree(firstAttribute,-1);
+             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
+             trees.add(root);
+
+             int posClass[] = new int[30162];
+             for(int l=0;l<matrix.length;l++)
+             {
+            	 posClass[l] = root.traversal(matrix[l]);
+             }
+			 double error =0.0;
+			 for(int l=0;l<posClass.length;l++)
+			 {
+				 if(posClass[l]==0)
+					 error += weights[l];
+			 }
+			 
+			 alphas[i] = 0.5*Math.log((1-error)/error);
+			 double sum_W = 0.0;
+			 for(int l =0;l<posClass.length;l++)
+			 {
+				 if(posClass[l]==1)
+	                {
+	                    weights[l]=weights[l]*Math.exp(-alphas[i]);
+	                }
+	                else
+	                {
+	                    weights[l]=weights[l]*Math.exp(alphas[i]);
+	                }
+	                sum_W+=weights[l];
+			 }
+			 for(int j=0;j<weights.length;j++)
+			 {
+                weights[j]=weights[j]/sum_W;
+			 }
+		 }
+	 }
+	 
+	 /**
+	 * @param testMatrix : The TestMatrix formed after running formMatrix() on testData.
+	 * Calculates the accuracy after the implementation of the boosting technique
+	 */
+	public void calcAccuracy(int testMatrix[][]){
+		 double accuracy = 0.0;
+	  		int result[] = {0,0};
+	  		for(int i=0;i<testMatrix.length;i++){
+	  			for(int j =0;j<num_trees;j++){
+	  				int temporary;
+	  				if(trees.get(j).traversal(testMatrix[i])==1)
+	  					temporary = (testMatrix[i][14]==0)?-1:1;
+	  				else
+	  					temporary = (1-testMatrix[i][14]==0)?-1:1;
+	  				values[i] += alphas[j] * temporary;
+	  			}
+	  		}
+	  		for(int i=0;i<values.length;i++){
+	  			if(values[i]>=0)
+	  			{
+	  				if(testMatrix[i][14]==1)
+	  					result[1]++;
+	  				else
+	  					result[0]++;
+	  			}
+  				else{
+  					if(testMatrix[i][14]==0)
+	  					result[1]++;
+	  				else
+	  					result[0]++;
+  				}
+	  		}
+	  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
+	  		accuracy = Math.round(accuracy*100) / 100.0;
+			System.out.println("Accuracy of the Adaboost is : " + accuracy+"%");
+	  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
+	 }
+}

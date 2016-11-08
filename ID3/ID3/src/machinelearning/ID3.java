@@ -81,7 +81,7 @@ public class ID3 {
         * 300 trees of 4 attributes each.
         * */
         
-       /* 
+       
         long RFstartTime = System.currentTimeMillis();
         
         
@@ -107,9 +107,7 @@ public class ID3 {
              root.children = runID3(tempMatrix,firstAttribute,attEnt,true);
              rf.populateMatrix(testMatrix, root, i);
         }
-        
         rf.findAccuracy(testMatrix);
-        
         
         long RFstopTime = System.currentTimeMillis();
         long RFelapsedTime = RFstopTime - RFstartTime;
@@ -118,11 +116,11 @@ public class ID3 {
         System.out.println();
         
         
-        */
+        
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(3000,500);
+        AdaBoost ab = new AdaBoost(3000,10);
         
         ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);
@@ -137,7 +135,7 @@ public class ID3 {
   	 * @param targetAttribute : The Parent node at the current level 
   	 * @param attEnt : The arrayList of Attribute Entropy objects.
   	 * @param flag :  will be true if we are implementing random forest i.e random selection of attributes. False otherwise
-  	 * @return
+  	 * @return Tree of ID3
   	 */
   	public static ArrayList<Tree> runID3(int matrix[][], int targetAttribute, ArrayList<AttributeEntropy> attEnt,boolean flag){
   		ArrayList<Tree> root = new ArrayList<Tree>();
@@ -542,7 +540,6 @@ public class ID3 {
 				matrix[i][13]=40;
   			
 			matrix[i][14] = dataItem.result;
-  				
   			i++;
   		}
   	}
@@ -571,7 +568,7 @@ public class ID3 {
   	/**
   	 * @param filename : the filename to be opened
   	 * @param data : The ArrayList of data objects which is to be populated on the basis of data
-  	 * @throws IOException
+  	 * @throws IOException : To handle File not found error.
   	 * @see IOException
   	 */
   	public static void inputHandle(String filename,ArrayList<DataSet> data)throws IOException {

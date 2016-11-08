@@ -1,0 +1,61 @@
+package machinelearning;
+
+
+/**
+ * A class to implement Random Forest Algorithm on our generated ID3 trees.
+ * It stores all the root nodes of the generated trees and then traverses through each of the tree and stores the result of each tree.
+ * The we find the majority and give that as the result
+ */
+public class RandomForrest {
+	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
+	int resultRandom[][] = new int[15060][300];
+	
+	/**
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
+	 */
+	
+	
+	/**
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * @param root : The tree in which we would be traversing
+	 * @param iter : number of the tree
+	 */
+	public void populateMatrix(int matrix[][],Tree root,int iter){	
+		for(int j=0;j<matrix.length;j++)
+			resultRandom[j][iter] = root.traversal(matrix[j]);
+	}
+	/**
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Prints the accuracy of the Random Forest implementation
+	 */
+	public void findAccuracy(int matrix[][]){
+		int values[] = new int[matrix.length];
+		for(int i=0;i<matrix.length;i++)
+		{
+			int positive=0,negative=0;
+			for(int j = 0;j<resultRandom[i].length;j++)
+			{
+				if(resultRandom[i][j]==1)
+					positive++;
+				else 
+					negative++;
+			}
+			
+			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
+		}
+
+		double accuracy = 0.0;
+  		int result[] = {0,0};
+  		for(int i=0;i<values.length;i++){
+  			if(values[i] == matrix[i][14])
+  				result[1]++;
+  			else
+  				result[0]++;
+  		}
+  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
+  		accuracy = Math.round(accuracy*100) / 100.0;
+		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
+  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
+	}
+}
