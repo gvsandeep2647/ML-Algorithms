@@ -55,7 +55,7 @@ class AdaBoost {
 
 			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
 			 root = new Tree(firstAttribute,-1);
-             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
+             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,true);
              
 
              error =0.0;

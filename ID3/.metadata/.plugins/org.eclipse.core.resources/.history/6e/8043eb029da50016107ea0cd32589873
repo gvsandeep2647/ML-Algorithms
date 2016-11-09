@@ -1,0 +1,194 @@
+package machinelearning;
+import java.util.*;
+
+/**
+ * A class to implement AdaBoost on our ID3 trees. 
+ * It learns from 'num_trees' number of samples where each sample has 2/3rd of the entire Data.
+ * It then associates each tree with a weight based on the error of classification of the tree.
+ * The weights of each miss classified example is then updated based on the error of that particular tree.
+ * At the end sign of the linear combination of all the trees give us the prediction and based on this the error is calculated.
+ */
+class AdaBoost {
+	
+	
+	double values[] = new double[15060];
+	int num_trees;
+	DataRef dr;
+	
+	/**
+	 * @param num_trees : The number of trees to be generated.
+	 * @param num_rows : The number of rows to be considered.
+	 */
+	AdaBoost(int num_trees){
+		this.num_trees= num_trees;
+		dr = new DataRef();
+	}
+	 /**
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * @param testMatrix : @param matrix : The Test Data in the form of a numeric matrix which is returned from the formMatrix() method
+	 */
+	public void adaBoost(int matrix[][], int testMatrix[][]){
+		 double[] weights = new double[matrix.length];
+		 int posClass[] = new int[30162];
+		 double sum_W = 0.0;
+		 double alpha = 0.0;
+		 ArrayList<Tree> stumps = new ArrayList<Tree>();
+		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
+		 int stumpClassification[] = new int[matrix.length];
+		 double stumpErr[] = new double[14];
+		 
+		 for(int i=0;i<matrix.length;i++)
+		 {
+			 weights[i]=1.0/(double)matrix.length;
+		 }
+		 
+		 //ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
+		 for(int i = 0 ; i<num_trees;i++)
+		 {
+			 for(int p=0;p<14;p++)
+			 {
+				 attEnt = new ArrayList<AttributeEntropy>();
+				 for(int j=0;j<14;j++)
+				 {
+					 attEnt.add(new AttributeEntropy(j));
+					if(p!=j)
+						attEnt.get(j).flag=false;
+				 }
+				 Tree root = new Tree(0,0);
+				 root = new Tree(p,-1);
+	             root.children = ID3.runID3(matrix,p,attEnt,false);
+	             stumps.add(root);
+			 }
+			 
+			 
+			 for(int k=0;k<stumpErr.length;k++)
+			 {
+				 for(int j=0;j<matrix.length;j++)
+				 {
+					 stumpClassification[j] = stumps.get(k).traversal(matrix[j]);
+				 }
+				 
+				 for(int j=0;j<stumpClassification.length;j++)
+				 {
+					 if(stumpClassification[j]==0)
+						 stumpErr[k] += weights[j];
+				 }
+			 }
+			 int index=0;
+			 
+			 double min = 5.0;
+			 for(int s=0;s<stumpErr.length;s++)
+			 {
+				 if(stumpErr[s]<min)
+					 {
+					 	min = stumpErr[s];
+					 	index = s;
+					 }
+			 }
+			 
+			 System.out.println(index);
+			 alpha = 0.5*Math.log((1-min)/min);
+			 
+			 sum_W = 0.0;
+			 for(int l=0;l<matrix.length;l++)
+			 {
+				posClass[l] = stumps.get(index).traversal(matrix[l]);
+			 }
+			 
+			 for(int l =0;l<posClass.length;l++)
+			 {
+				 if(posClass[l]==1)
+	                {
+	                    weights[l]=weights[l]*Math.exp(-alpha);
+	                }
+	                else
+	                {
+	                    weights[l]=weights[l]*Math.exp(alpha);
+	                }
+	                sum_W+=weights[l];
+			 }
+			 for(int j=0;j<weights.length;j++)
+			 {
+                weights[j]=weights[j]/sum_W;
+			 }
+			 
+			 for(int j = 0;j<testMatrix.length;j++){
+				 int temporary;
+				 if(stumps.get(index).traversal(testMatrix[j])==1)
+					temporary = (testMatrix[j][14]==0)?-1:1;
+				 else
+					temporary = (1-testMatrix[j][14]==0)?-1:1;
+				values[j] += alpha * temporary;
+			 }
+		 }
+	 }
+	 
+	 /**
+	 * @param testMatrix : The TestMatrix formed after running formMatrix() on testData.
+	 * Calculates the accuracy after the implementation of the boosting technique
+	 */
+	public void calcAccuracy(int testMatrix[][]){
+		 double accuracy = 0.0;
+	  		int result[] = {0,0};
+	  		for(int i=0;i<values.length;i++){
+	  			if(values[i]>0)
+	  			{
+	  				if(testMatrix[i][14]==1)
+	  					result[1]++;
+	  				else
+	  					result[0]++;
+	  			}
+  				else{
+  					if(testMatrix[i][14]==0)
+	  					result[1]++;
+	  				else
+	  					result[0]++;
+  				}
+	  		}
+	  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
+	  		accuracy = Math.round(accuracy*100) / 100.0;
+			System.out.println("Accuracy of the Adaboost is : " + accuracy+"%");
+	  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
+	 }
+	
+	 public int getDistributedRandomNumber(double distribution[]) {
+	        double rand = Math.random();
+	        double[] cumul = new double[distribution.length];
+	        cumul[0] = distribution[0];
+	        for(int i=1;i<cumul.length;i++){
+	        	cumul[i] = cumul[i-1] + distribution[i];
+	        }
+	        for(int j=0;j<cumul.length;j++)
+	        {
+	            if(rand<=cumul[j])
+	            {
+	                return j;
+	            }
+	        }
+	        return 0;
+	    }
+	 
+	 public Tree getStump(int attribute, double weights[], int matrix[][]){
+		 Tree root = new Tree(attribute, -1);
+		 double min_weight = 1.0;
+		 for(int i=0;i<weights.length;i++){
+			 if(weights[i]<min_weight){
+				 min_weight = weights[i];
+			 }
+		 }
+		 for(int i = 0;i<dr.attrRef[attribute].length;i++){
+			 root.children.add(new Tree(attribute,i));
+		 }
+		 int pos[] = new int[dr.attrRef[attribute].length];
+		 int neg[] = new int[dr.attrRef[attribute].length];
+		 for(int i=0;i<matrix.length;i++){
+			 if(matrix[i][14]==1){
+				 pos[matrix[i][attribute]] = pos[matrix[i][attribute]] + (int)(weights[i]/min_weight); 
+			 }
+			 else{
+				 neg[matrix[i][attribute]] = neg[matrix[i][attribute]] + (int)(weights[i]/min_weight);
+			 }
+		 }
+		 return root;
+	 }
+}
