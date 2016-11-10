@@ -1,4 +1,4 @@
-
+package machinelearning;
 import java.io.*;
 import java.util.*;
 
@@ -34,6 +34,7 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println("train "+e);
         }
+        
         
         long LearningstartTime = System.currentTimeMillis();
         
@@ -120,7 +121,7 @@ public class ID3 {
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(3000,10);
+        AdaBoost ab = new AdaBoost(5000,10);
         
         ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);
@@ -128,7 +129,7 @@ public class ID3 {
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
         System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
-  	}
+        }
 
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method

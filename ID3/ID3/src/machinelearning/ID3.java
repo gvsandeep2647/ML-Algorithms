@@ -35,6 +35,7 @@ public class ID3 {
         	System.out.println("train "+e);
         }
         
+        
         long LearningstartTime = System.currentTimeMillis();
         
         /*Building ID3 starts*/
@@ -81,7 +82,7 @@ public class ID3 {
         * 300 trees of 4 attributes each.
         * */
         
-       /*
+       
         long RFstartTime = System.currentTimeMillis();
         
         
@@ -116,11 +117,11 @@ public class ID3 {
         System.out.println();
         
         
-        */
+        
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(10000,10);
+        AdaBoost ab = new AdaBoost(5000,10);
         
         ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);
@@ -128,7 +129,7 @@ public class ID3 {
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
         System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
-  	}
+        }
 
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method

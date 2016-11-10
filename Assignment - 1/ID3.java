@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -34,6 +33,7 @@ public class ID3 {
         }catch(Exception e){
         	System.out.println("train "+e);
         }
+        
         
         long LearningstartTime = System.currentTimeMillis();
         
@@ -120,7 +120,7 @@ public class ID3 {
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(3000,10);
+        AdaBoost ab = new AdaBoost(5000,10);
         
         ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);
@@ -128,7 +128,7 @@ public class ID3 {
         long AdastopTime = System.currentTimeMillis();
         long AdaelapsedTime = AdastopTime - AdastartTime;
         System.out.println("Time taken for the execution after implementing the AdaBoost technique: " + (double)(AdaelapsedTime)/1000 + " seconds");
-  	}
+        }
 
   	/**
   	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
@@ -759,6 +759,66 @@ public class ID3 {
 	} 
 }
 
+
+/**
+ * A class to implement Random Forest Algorithm on our generated ID3 trees.
+ * It stores all the root nodes of the generated trees and then traverses through each of the tree and stores the result of each tree.
+ * The we find the majority and give that as the result
+ */
+class RandomForrest {
+	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
+	int resultRandom[][] = new int[15060][300];
+	
+	/**
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
+	 */
+	
+	
+	/**
+	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * @param root : The tree in which we would be traversing
+	 * @param iter : number of the tree
+	 */
+	public void populateMatrix(int matrix[][],Tree root,int iter){	
+		for(int j=0;j<matrix.length;j++)
+			resultRandom[j][iter] = root.traversal(matrix[j]);
+	}
+	/**
+	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
+	 * Prints the accuracy of the Random Forest implementation
+	 */
+	public void findAccuracy(int matrix[][]){
+		int values[] = new int[matrix.length];
+		for(int i=0;i<matrix.length;i++)
+		{
+			int positive=0,negative=0;
+			for(int j = 0;j<resultRandom[i].length;j++)
+			{
+				if(resultRandom[i][j]==1)
+					positive++;
+				else 
+					negative++;
+			}
+			
+			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
+		}
+
+		double accuracy = 0.0;
+  		int result[] = {0,0};
+  		for(int i=0;i<values.length;i++){
+  			if(values[i] == matrix[i][14])
+  				result[1]++;
+  			else
+  				result[0]++;
+  		}
+  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
+  		accuracy = Math.round(accuracy*100) / 100.0;
+		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
+  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
+	}
+}
+
 /**
  * A class to implement AdaBoost on our ID3 trees. 
  * It learns from 'num_trees' number of samples where each sample has 2/3rd of the entire Data.
@@ -801,6 +861,7 @@ class AdaBoost {
 		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
 		 for(int i = 0 ; i<num_trees;i++)
 		 {
+			 
              for(int k = 0; k<num_rows; k++)
              {
         		 tempMatrix[k] = matrix[getDistributedRandomNumber(weights)];
@@ -813,7 +874,7 @@ class AdaBoost {
 
 			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
 			 root = new Tree(firstAttribute,-1);
-             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
+             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,true);
              
 
              error =0.0;
@@ -907,84 +968,180 @@ class AdaBoost {
 	    }
 }
 
+/**
+ *  A Node of the tree 
+ *	Contains : Attribute (String and Integer counterparts) , value (String and Integer counterparts)
+ *  and the list of children
+ */
+class Tree {
+	/** The attribute of the dataSet in consideration */
+	String attribute;
+	/** The value which the attribute has taken. */
+	String value;
+	/** Corresponding integer value for the attribute as defined in DataRef */
+	int intAttr;
+	/** Corresponding integer value for the value taken by the attribute as defined in DataRef */
+	int intVal;
+	/** All the possible subtrees of the current attribute and value pair.*/
+	ArrayList<Tree> children;
+	int cnt;
+	
+	/**
+	 * @param attribute : The attribute of the dataSet in consideration
+	 * @param value : The value which the attribute has taken.
+	 */
+	Tree(int attribute, int value){
+		DataRef temp = new DataRef();
+		this.attribute = temp.majorRef[attribute];
+		this.intAttr = attribute;
+		this.intVal = value;
+		if(value == -1)
+			this.value = "";
+		else
+			this.value = temp.attrRef[attribute][value];
+		children = new ArrayList<Tree>();
+	}
+		
+	/**
+	 * @param attribute : The attribute of the child (Next Level)
+	 * @param value : The value of the attribute
+	 * adds another node as a child of the current node. 
+	 */
+	public void addChild(int attribute, int value){
+		Tree node = new Tree(attribute, value);
+		this.children.add(node);
+	}
+	
+	/**
+	 * @param attribute : The attribute amongst whose children the desired value lies.
+	 * @param value : The value that we are searching
+	 * @return the required node
+	 */
+	public Tree searchChild(int attribute, int value){
+		Tree node;
+		if(this.children.isEmpty()){
+			return null;
+		}
+		else{
+			int i = 0;
+			for(i=0;i<this.children.size();i++){
+					if(attribute == this.children.get(i).intAttr && value == this.children.get(i).intVal){
+					node  = this.children.get(i);
+					return node;
+					}
+			}
+			return null;
+		}
+	}
+	
+	/**
+	 * @param data The instance whose result the tree is supposed to predict
+	 * @return 0 if the tree miss-classifies data and 1 if the classification is correct
+	 * Traverses the tree from root to the leaf based on values of attributes in data and decides if tree has misclassified the data or not
+	 */
+	public int traversal(int[] data){
+		int value = 0;
+		int currAttr = this.intAttr;
+		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
+		try{
+		while(true){
+			currAttr = tempNode.children.get(0).intAttr;
+			if(currAttr==14){
+					
+				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
+				break;
+			}else{
+				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
+			}
+		}
+		}catch(Exception e){
+			}
+		return value;
+	}
+
+	/**
+	 * An Utility function to print the tree in a rather unconventional way for better understanding
+	 */
+	
+	public void printTree(){
+		Queue<Tree> q = new LinkedList<Tree>();
+		q.add(this);
+		Tree temp;
+		System.out.println(this.attribute+"-"+this.value+"\n");
+		while(!q.isEmpty()){
+			temp = q.poll();
+			for(int i=0;i<temp.children.size();i++){
+				q.add(temp.children.get(i));
+				System.out.println("Parent:"+temp.attribute+"-"+temp.value+" "+" Child:"+temp.children.get(i).attribute+"-"+temp.children.get(i).value+" ");
+			}
+		}
+	}
+}
 
 /**
- * A class which is used for calculating the entropy of a given attribute in the passed dataset.
+ * DataSet is an object which captures the information of one row in the Data.
  */
-class AttributeEntropy {
-	/** The attribute for which the object stores information of */
-	public int attribute;
-	/** A map which has all the possible values an attribute can take and also stores the count of postive and negative examples*/
-	public Map<Integer,int[]> diversity;
-	/** To indicate whether the attribute is supposed to be considered while choosing the attribute with least entropy */
-	public boolean flag;
-	/** The value of entropy with the respect to this attribute */
-	double entropy;
-	public AttributeEntropy(int attribute) {
-		flag = true;
-		this.attribute = attribute;
-		diversity = new HashMap<Integer,int[]>();
-		entropy = 0.0;
+class DataSet{
+	int age;
+	String workClass;
+	int fnlwgt;
+	String education;
+	int educationNum;
+	String maritalStatus;
+	String occupation;
+	String relationship;
+	String race;
+	String sex;
+	int capitalGain;
+	int capitalLoss;
+	int hoursPerWeek;
+	String nativeCountry;
+	int result;
+	/**
+	 * @param age : The age attribute in the dataset
+	 * @param workClass : The work Class attribute in the dataset
+	 * @param fnlwgt : The Fnlwgt attribute in the dataset
+	 * @param education : The Education attribute in the dataset
+	 * @param educationNum : The Education Number attribute in the dataset
+	 * @param maritalStatus : The Marital Status attribute in the dataset
+	 * @param occupation : The Occupation attribute in the dataset
+	 * @param relationship : The Relationship attribute in the dataset
+	 * @param race : The Race attribute in the dataset
+	 * @param sex : The Sex attribute in the dataset
+	 * @param capitalGain : The Capital Gain attribute in the dataset
+	 * @param capitalLoss : The Capital Loss attribute in the dataset
+	 * @param hoursPerWeek : The Hours Per Week attribute in the dataset
+	 * @param nativeCountry : The Native - Country attribute in the dataset
+	 * @param income : The income attribute in the dataset
+	 */
+	DataSet(int age,String workClass,int fnlwgt,String education,int educationNum,String maritalStatus,String occupation,String relationship,String race,String sex,int capitalGain,int capitalLoss,int hoursPerWeek,String nativeCountry,String income){
+		this.age =  age;
+		this.workClass = workClass;
+		this.fnlwgt = fnlwgt;
+		this.education = education;
+		this.educationNum = educationNum;
+		this.maritalStatus = maritalStatus;
+		this.occupation = occupation;
+		this.relationship = relationship;
+		this.race = race;
+		this.sex = sex;
+		this.capitalGain = capitalGain;
+		this.capitalLoss = capitalLoss;
+		this.hoursPerWeek = hoursPerWeek;
+		this.nativeCountry = nativeCountry;
+		result = income.equals("<=50K")?0:1;
 	}
 	
-	/**
-	 * @param matrix : Dataset
-	 * Updates the values of the maps which contain the attribute value as a key and the corresponding array of positive and negative count as value
-	 */
-
-	public void updateFields(int matrix[][]){
-		diversity = new HashMap<Integer,int[]>();
-		for(int i=0;i<matrix.length;i++){
-			if(!diversity.containsKey(ID3.matrix[i][attribute]))
-			{
-				diversity.put(ID3.matrix[i][attribute], new int[2]);
-				if(ID3.matrix[i][14]==1)
-					diversity.get(ID3.matrix[i][attribute])[1]++;
-				else
-					diversity.get(ID3.matrix[i][attribute])[0]++;
-			}
-			else
-			{
-				if(ID3.matrix[i][14]==1)
-					diversity.get(ID3.matrix[i][attribute])[1]++;
-				else
-					diversity.get(ID3.matrix[i][attribute])[0]++;
-			}		
-		}
-	}
+   @Override
+   public String toString() {
+	   /** Prints one row of the dataSet in the string format */
+        return ("Age: "+this.age+" Work Class: "+ this.workClass +" fnlwgt: "+ this.fnlwgt +" Education : " + this.education
+        		+" Education Num: "+this.educationNum+" Marital Status "+this.maritalStatus+" Occuptaion: "+this.occupation
+        		+ " RelationShip Status: "+this.relationship+" Race: "+this.race+" Sex: "+this.sex
+        		+ " Capital Gain: "+this.capitalGain+" Capital Loss: "+this.capitalLoss+" Hours Per Week: "+this.hoursPerWeek
+        		+ " nativeCountry :"+this.nativeCountry+" Result: "+this.result );
+   }
 	
-	/**
-	 * Updates the class variable entropy by calculating the entropy of the attribute
-	 */
-	public void calcEntropy() {
-		double indiEntropy[] =  new double[diversity.size()];
-		int sum_value=0;
-		int i = 0;
-		entropy = 0.0;
-		for (Map.Entry<Integer, int[]> entry : diversity.entrySet()) {
-		    int[] value = entry.getValue();
-		    double temp1 = (double)value[0]/(value[0]+value[1]);
-		    double temp2 = (double)value[1]/(value[0]+value[1]);
-		    indiEntropy[i] = (-1)*temp1*(Math.log(temp1)/Math.log(2))+ (-1)*temp2*(Math.log(temp2)/Math.log(2));
-		    if(Double.isNaN(indiEntropy[i]))
-		    	indiEntropy[i] = 0.0;
-		    entropy += (value[0]+value[1])*indiEntropy[i];
-		    sum_value += value[0]+value[1];
-		    i++;
-		}
-		
-		entropy = entropy/sum_value;
-	}
-	
-	/**
-	 *  An utility function to print the Map of the object.
-	 */
-	public void printMap(){
-		for(Map.Entry<Integer, int[]> entry : diversity.entrySet()){
-			int []value = entry.getValue();
-			System.out.println(entry.getKey()+" "+value[0]+" "+value[1]);
-		}
-	}
 }
 
 /**
@@ -1160,285 +1317,81 @@ class DataRef {
 
 
 /**
- * DataSet is an object which captures the information of one row in the Data.
+ * A class which is used for calculating the entropy of a given attribute in the passed dataset.
  */
-class DataSet{
-	int age;
-	String workClass;
-	int fnlwgt;
-	String education;
-	int educationNum;
-	String maritalStatus;
-	String occupation;
-	String relationship;
-	String race;
-	String sex;
-	int capitalGain;
-	int capitalLoss;
-	int hoursPerWeek;
-	String nativeCountry;
-	int result;
-	/**
-	 * @param age : The age attribute in the dataset
-	 * @param workClass : The work Class attribute in the dataset
-	 * @param fnlwgt : The Fnlwgt attribute in the dataset
-	 * @param education : The Education attribute in the dataset
-	 * @param educationNum : The Education Number attribute in the dataset
-	 * @param maritalStatus : The Marital Status attribute in the dataset
-	 * @param occupation : The Occupation attribute in the dataset
-	 * @param relationship : The Relationship attribute in the dataset
-	 * @param race : The Race attribute in the dataset
-	 * @param sex : The Sex attribute in the dataset
-	 * @param capitalGain : The Capital Gain attribute in the dataset
-	 * @param capitalLoss : The Capital Loss attribute in the dataset
-	 * @param hoursPerWeek : The Hours Per Week attribute in the dataset
-	 * @param nativeCountry : The Native - Country attribute in the dataset
-	 * @param income : The income attribute in the dataset
-	 */
-	DataSet(int age,String workClass,int fnlwgt,String education,int educationNum,String maritalStatus,String occupation,String relationship,String race,String sex,int capitalGain,int capitalLoss,int hoursPerWeek,String nativeCountry,String income){
-		this.age =  age;
-		this.workClass = workClass;
-		this.fnlwgt = fnlwgt;
-		this.education = education;
-		this.educationNum = educationNum;
-		this.maritalStatus = maritalStatus;
-		this.occupation = occupation;
-		this.relationship = relationship;
-		this.race = race;
-		this.sex = sex;
-		this.capitalGain = capitalGain;
-		this.capitalLoss = capitalLoss;
-		this.hoursPerWeek = hoursPerWeek;
-		this.nativeCountry = nativeCountry;
-		result = income.equals("<=50K")?0:1;
+class AttributeEntropy {
+	/** The attribute for which the object stores information of */
+	public int attribute;
+	/** A map which has all the possible values an attribute can take and also stores the count of postive and negative examples*/
+	public Map<Integer,int[]> diversity;
+	/** To indicate whether the attribute is supposed to be considered while choosing the attribute with least entropy */
+	public boolean flag;
+	/** The value of entropy with the respect to this attribute */
+	double entropy;
+	public AttributeEntropy(int attribute) {
+		flag = true;
+		this.attribute = attribute;
+		diversity = new HashMap<Integer,int[]>();
+		entropy = 0.0;
 	}
 	
-   @Override
-   public String toString() {
-	   /** Prints one row of the dataSet in the string format */
-        return ("Age: "+this.age+" Work Class: "+ this.workClass +" fnlwgt: "+ this.fnlwgt +" Education : " + this.education
-        		+" Education Num: "+this.educationNum+" Marital Status "+this.maritalStatus+" Occuptaion: "+this.occupation
-        		+ " RelationShip Status: "+this.relationship+" Race: "+this.race+" Sex: "+this.sex
-        		+ " Capital Gain: "+this.capitalGain+" Capital Loss: "+this.capitalLoss+" Hours Per Week: "+this.hoursPerWeek
-        		+ " nativeCountry :"+this.nativeCountry+" Result: "+this.result );
-   }
-	
-}
-
-
-/**
- *  A class which returns random numbers based on a given probability distribution
- *
- */
-class DistributedRandomNumberGenerator {
-
-    private HashMap<Integer, Double> distribution;
-    private double distSum;
-
-    /**
-     * Initializes the class with a private variable distribution
-     */
-    public DistributedRandomNumberGenerator() {
-        distribution = new HashMap<>();
-    }
-
-    /**
-     * @param value : The number to be inserted
-     * @param distribution : The probability of that number being selected
-     */
-    public void addNumber(int value, double distribution) {
-        if (this.distribution.get(value) != null) {
-            distSum -= this.distribution.get(value);
-        }
-        this.distribution.put(value, distribution);
-        distSum += distribution;
-    }
-
-    /**
-     * @return : A random number based on the probability distribution
-     */
-    public int getDistributedRandomNumber() {
-        double rand = Math.random();
-        double ratio = 1.0f / distSum;
-        double tempDist = 0;
-        for (Integer i : distribution.keySet()) {
-            tempDist += distribution.get(i);
-            if (rand / ratio <= tempDist) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-}
-
-
-
-/**
- * A class to implement Random Forest Algorithm on our generated ID3 trees.
- * It stores all the root nodes of the generated trees and then traverses through each of the tree and stores the result of each tree.
- * The we find the majority and give that as the result
- */
-class RandomForrest {
-	/** resultRandom[i][j] = 1 if the jth tree classified the ith row of the dataset correctly. 0 otherwise */
-	int resultRandom[][] = new int[15060][300];
-	
 	/**
-	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-	 * Updates a matrix which stores whether a tree has properly classified the given example or not.
+	 * @param matrix : Dataset
+	 * Updates the values of the maps which contain the attribute value as a key and the corresponding array of positive and negative count as value
 	 */
-	
-	
-	/**
-	 * @param matrix :  The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-	 * @param root : The tree in which we would be traversing
-	 * @param iter : number of the tree
-	 */
-	public void populateMatrix(int matrix[][],Tree root,int iter){	
-		for(int j=0;j<matrix.length;j++)
-			resultRandom[j][iter] = root.traversal(matrix[j]);
-	}
-	/**
-	 * @param matrix : The Dataset in the form of a numeric matrix which is returned from the formMatrix() method
-	 * Prints the accuracy of the Random Forest implementation
-	 */
-	public void findAccuracy(int matrix[][]){
-		int values[] = new int[matrix.length];
-		for(int i=0;i<matrix.length;i++)
-		{
-			int positive=0,negative=0;
-			for(int j = 0;j<resultRandom[i].length;j++)
+
+	public void updateFields(int matrix[][]){
+		diversity = new HashMap<Integer,int[]>();
+		for(int i=0;i<matrix.length;i++){
+			if(!diversity.containsKey(ID3.matrix[i][attribute]))
 			{
-				if(resultRandom[i][j]==1)
-					positive++;
-				else 
-					negative++;
+				diversity.put(ID3.matrix[i][attribute], new int[2]);
+				if(ID3.matrix[i][14]==1)
+					diversity.get(ID3.matrix[i][attribute])[1]++;
+				else
+					diversity.get(ID3.matrix[i][attribute])[0]++;
 			}
-			
-			values[i] = (positive>negative)?matrix[i][14]:1-matrix[i][14];
+			else
+			{
+				if(ID3.matrix[i][14]==1)
+					diversity.get(ID3.matrix[i][attribute])[1]++;
+				else
+					diversity.get(ID3.matrix[i][attribute])[0]++;
+			}		
 		}
-
-		double accuracy = 0.0;
-  		int result[] = {0,0};
-  		for(int i=0;i<values.length;i++){
-  			if(values[i] == matrix[i][14])
-  				result[1]++;
-  			else
-  				result[0]++;
-  		}
-  		accuracy = ((double)result[1]/(result[0]+result[1]))*100;
-  		accuracy = Math.round(accuracy*100) / 100.0;
-		System.out.println("Accuracy of the Random Forrest is : " + accuracy+"%");
-  		System.out.println("It has correctly classified "+result[1]+" instances out of "+(result[0]+result[1])+" instances" );
 	}
-}
-
-/**
- *  A Node of the tree 
- *	Contains : Attribute (String and Integer counterparts) , value (String and Integer counterparts)
- *  and the list of children
- */
-class Tree {
-	/** The attribute of the dataSet in consideration */
-	String attribute;
-	/** The value which the attribute has taken. */
-	String value;
-	/** Corresponding integer value for the attribute as defined in DataRef */
-	int intAttr;
-	/** Corresponding integer value for the value taken by the attribute as defined in DataRef */
-	int intVal;
-	/** All the possible subtrees of the current attribute and value pair.*/
-	ArrayList<Tree> children;
-	int cnt;
 	
 	/**
-	 * @param attribute : The attribute of the dataSet in consideration
-	 * @param value : The value which the attribute has taken.
+	 * Updates the class variable entropy by calculating the entropy of the attribute
 	 */
-	Tree(int attribute, int value){
-		DataRef temp = new DataRef();
-		this.attribute = temp.majorRef[attribute];
-		this.intAttr = attribute;
-		this.intVal = value;
-		if(value == -1)
-			this.value = "";
-		else
-			this.value = temp.attrRef[attribute][value];
-		children = new ArrayList<Tree>();
-	}
+	public void calcEntropy() {
+		double indiEntropy[] =  new double[diversity.size()];
+		int sum_value=0;
+		int i = 0;
+		entropy = 0.0;
+		for (Map.Entry<Integer, int[]> entry : diversity.entrySet()) {
+		    int[] value = entry.getValue();
+		    double temp1 = (double)value[0]/(value[0]+value[1]);
+		    double temp2 = (double)value[1]/(value[0]+value[1]);
+		    indiEntropy[i] = (-1)*temp1*(Math.log(temp1)/Math.log(2))+ (-1)*temp2*(Math.log(temp2)/Math.log(2));
+		    if(Double.isNaN(indiEntropy[i]))
+		    	indiEntropy[i] = 0.0;
+		    entropy += (value[0]+value[1])*indiEntropy[i];
+		    sum_value += value[0]+value[1];
+		    i++;
+		}
 		
-	/**
-	 * @param attribute : The attribute of the child (Next Level)
-	 * @param value : The value of the attribute
-	 * adds another node as a child of the current node. 
-	 */
-	public void addChild(int attribute, int value){
-		Tree node = new Tree(attribute, value);
-		this.children.add(node);
+		entropy = entropy/sum_value;
 	}
 	
 	/**
-	 * @param attribute : The attribute amongst whose children the desired value lies.
-	 * @param value : The value that we are searching
-	 * @return the required node
+	 *  An utility function to print the Map of the object.
 	 */
-	public Tree searchChild(int attribute, int value){
-		Tree node;
-		if(this.children.isEmpty()){
-			return null;
-		}
-		else{
-			int i = 0;
-			for(i=0;i<this.children.size();i++){
-					if(attribute == this.children.get(i).intAttr && value == this.children.get(i).intVal){
-					node  = this.children.get(i);
-					return node;
-					}
-			}
-			return null;
-		}
-	}
-	
-	/**
-	 * @param data The instance whose result the tree is supposed to predict
-	 * @return 0 if the tree miss-classifies data and 1 if the classification is correct
-	 * Traverses the tree from root to the leaf based on values of attributes in data and decides if tree has misclassified the data or not
-	 */
-	public int traversal(int[] data){
-		int value = 0;
-		int currAttr = this.intAttr;
-		Tree tempNode = this.searchChild(currAttr,data[currAttr]);
-		try{
-		while(true){
-			currAttr = tempNode.children.get(0).intAttr;
-			if(currAttr==14){
-					
-				value = (data[currAttr]==tempNode.children.get(0).intVal)?1:0;
-				break;
-			}else{
-				tempNode = tempNode.searchChild(currAttr,data[currAttr]);
-			}
-		}
-		}catch(Exception e){
-			}
-		return value;
-	}
-
-	/**
-	 * An Utility function to print the tree in a rather unconventional way for better understanding
-	 */
-	
-	public void printTree(){
-		Queue<Tree> q = new LinkedList<Tree>();
-		q.add(this);
-		Tree temp;
-		System.out.println(this.attribute+"-"+this.value+"\n");
-		while(!q.isEmpty()){
-			temp = q.poll();
-			for(int i=0;i<temp.children.size();i++){
-				q.add(temp.children.get(i));
-				System.out.println("Parent:"+temp.attribute+"-"+temp.value+" "+" Child:"+temp.children.get(i).attribute+"-"+temp.children.get(i).value+" ");
-			}
+	public void printMap(){
+		for(Map.Entry<Integer, int[]> entry : diversity.entrySet()){
+			int []value = entry.getValue();
+			System.out.println(entry.getKey()+" "+value[0]+" "+value[1]);
 		}
 	}
 }
+
