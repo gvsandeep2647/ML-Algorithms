@@ -44,4 +44,4 @@
 		</tr>
 	</tbody>
 </table>
-<p><b>Note :</b> Kindly view the ml-1 pdf for more details.</p>
+<p><b>Note :</b> Kindly view the ml-1.pdf for more details.</p>
