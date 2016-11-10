@@ -24,7 +24,6 @@
 			<th>ID3</th>
 			<th>Random Forest</th>
 			<th>AdaBoost</th>
-			<th>AdaBoost with modification</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -33,14 +32,12 @@
 			<td>10 Seconds</td>
 			<td>250 Seconds</td>
 			<td>150 Seconds</td>
-			<td>130 Seconds</td>
 		</tr>
 		<tr>
 			<td>Accuracy</td>
 			<td>81.32%</td>
 			<td>83.45%</td>
-			<td>84.18%</td>
-			<td>84.85%</td>
+			<td>84.6%</td>
 		</tr>
 	</tbody>
 </table>

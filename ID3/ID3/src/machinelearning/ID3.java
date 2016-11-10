@@ -81,7 +81,7 @@ public class ID3 {
         * 300 trees of 4 attributes each.
         * */
         
-       
+       /*
         long RFstartTime = System.currentTimeMillis();
         
         
@@ -116,11 +116,11 @@ public class ID3 {
         System.out.println();
         
         
-        
+        */
         /*  AdaBoost  */
         long AdastartTime = System.currentTimeMillis();
         
-        AdaBoost ab = new AdaBoost(3000,10);
+        AdaBoost ab = new AdaBoost(10000,10);
         
         ab.adaBoost(matrix,testMatrix);
         ab.calcAccuracy(testMatrix);

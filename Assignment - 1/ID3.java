@@ -825,6 +825,11 @@ class AdaBoost {
              }
 			 
 			 alpha = 0.5*Math.log((1-error)/error);
+			 if(alpha<=0)
+			 {
+				 i--;
+				 continue;
+			 }
 			 sum_W = 0.0;
 			 for(int l =0;l<posClass.length;l++)
 			 {

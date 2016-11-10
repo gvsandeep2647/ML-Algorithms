@@ -22,12 +22,12 @@
 		<item value="true" key="splitindex"/>
 		<item value="true" key="fromStandard"/>
 		<item value="false" key="notree"/>
-		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/Documentation" key="destdir"/>
+		<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/doc" key="destdir"/>
 		<item value="false" key="openinbrowser"/>
 		<section name="projects">
 			<section name="ID3">
 				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/javadoc.xml" key="antpath"/>
-				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/Documentation" key="destdir"/>
+				<item value="/home/sandeep/Desktop/Machine Learning/ML Algorithms/ID3/ID3/doc" key="destdir"/>
 				<item value="" key="href"/>
 			</section>
 		</section>
