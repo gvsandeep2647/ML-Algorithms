@@ -43,6 +43,7 @@ class AdaBoost {
 		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
 		 for(int i = 0 ; i<num_trees;i++)
 		 {
+			 
              for(int k = 0; k<num_rows; k++)
              {
         		 tempMatrix[k] = matrix[getDistributedRandomNumber(weights)];
@@ -55,7 +56,7 @@ class AdaBoost {
 
 			 int firstAttribute = ID3.findA(tempMatrix,attEnt,attrToConsider);
 			 root = new Tree(firstAttribute,-1);
-             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,false);
+             root.children = ID3.runID3(tempMatrix,firstAttribute,attEnt,true);
              
 
              error =0.0;

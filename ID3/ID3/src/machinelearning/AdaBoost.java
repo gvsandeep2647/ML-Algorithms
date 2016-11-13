@@ -43,7 +43,7 @@ class AdaBoost {
 		 ArrayList<AttributeEntropy> attEnt = new ArrayList<AttributeEntropy>();
 		 for(int i = 0 ; i<num_trees;i++)
 		 {
-			 System.out.println(i);
+			 
              for(int k = 0; k<num_rows; k++)
              {
         		 tempMatrix[k] = matrix[getDistributedRandomNumber(weights)];
