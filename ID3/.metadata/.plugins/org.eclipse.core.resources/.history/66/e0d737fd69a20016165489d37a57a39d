@@ -1,5 +1,0 @@
-package machinelearning;
-
-public class Tester {
-	ID3 ForTest = new ID3();
-}
